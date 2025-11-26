@@ -1,0 +1,10 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'tailwindcss';
+
+
+.img-fixed {
+    height: 400px;       /* одинаковая высота блока */
+    object-fit: contain; /* уменьшает, но не режет */
+    width: 100%;
+    padding: 10px; /* чтобы фото не липло к краям (по желанию) */
+}

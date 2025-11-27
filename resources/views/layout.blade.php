@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    @vite('resources/css/app.css')
-    <link rel="icon" href="logo.jpg" type="image/png">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/png" href="{{asset ('apple_black.png') }}">
 </head>
 
 <body class="min-h-screen flex flex-col">
@@ -16,10 +16,38 @@
                 <use xlink:href="#bootstrap"></use>
             </svg> <span class="fs-4">Sklepik u Tima</span> </a>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="{{ route('categories') }}" class="nav-link text-dark">Kategorie</a></li>
-            <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark">Produkty</a></li>
-            <li class="nav-item"><a href="{{ route('about') }}" class="nav-link text-dark">O nas</a></li>
-            <li class="nav-item"><a href="{{ route('opinie') }}" class="nav-link text-dark">Opinie</a></li>
+            <li class="nav-item"><a href="{{ route('categories') }}" class="nav-link"><div class="liquidGlass-wrapper button">
+                        <div class="liquidGlass-effect"></div>
+                        <div class="liquidGlass-tint"></div>
+                        <div class="liquidGlass-shine"></div>
+                        <div class="liquidGlass-text">
+                            Kategorie
+                        </div>
+                    </div></a></li>
+            <li class="nav-item"><a href="{{ route('home') }}" class="nav-link"><div class="liquidGlass-wrapper button">
+                        <div class="liquidGlass-effect"></div>
+                        <div class="liquidGlass-tint"></div>
+                        <div class="liquidGlass-shine"></div>
+                        <div class="liquidGlass-text">
+                            Produkty
+                        </div>
+                    </div></a></li>
+            <li class="nav-item"><a href="{{ route('about') }}" class="nav-link"><div class="liquidGlass-wrapper button">
+                        <div class="liquidGlass-effect"></div>
+                        <div class="liquidGlass-tint"></div>
+                        <div class="liquidGlass-shine"></div>
+                        <div class="liquidGlass-text">
+                            O nas
+                        </div>
+                    </div></a></li>
+            <li class="nav-item"><a href="{{ route('opinie') }}" class="nav-link"><div class="liquidGlass-wrapper button">
+                        <div class="liquidGlass-effect"></div>
+                        <div class="liquidGlass-tint"></div>
+                        <div class="liquidGlass-shine"></div>
+                        <div class="liquidGlass-text">
+                            Opinie
+                        </div>
+                    </div></a></li>
         </ul>
     </header>
     <main class="flex-grow">

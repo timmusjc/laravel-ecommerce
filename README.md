@@ -1,4 +1,4 @@
-Laravel E-commerce Shop — Diploma Project
+Laravel E-commerce shop — Diploma project
 
 This repository contains a fully functional e-commerce web application developed as part of a diploma project in Computer Science.
 The project demonstrates practical implementation of modern web technologies using Laravel 10, including dynamic product pages, category management, image handling, and a responsive Bootstrap-based frontend.

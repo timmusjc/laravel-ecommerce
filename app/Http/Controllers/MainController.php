@@ -14,6 +14,14 @@ class MainController extends Controller {
         return view('home', compact('products'));
     }
 
+    public function search(Request $request){
+        $query = $request->input('query');
+
+        $products = Product::where('name', 'LIKE', "%{$query}%")->orWhere('description', 'LIKE', "%{$query}%")->paginate(12);
+
+        return view('search', compact('products', 'query'));
+    }
+
     public function product($slug) {
         $product = Product::where('slug', $slug)->first();
         return view('product', compact('product'));

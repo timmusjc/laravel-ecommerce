@@ -1,10 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Sklepik u Tima
+    Wyniki wyszukiwania: {{$query}}
 @endsection
 
 @section('main_content')
+<h1 class="text-center">Wyniki wyszukiwania: {{$query}}</h1>
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">

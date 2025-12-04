@@ -2,7 +2,9 @@
 @import 'tailwindcss';
 
 
-
+a {
+    text-decoration: none;
+}
 
 .img-fixed {
     height: 400px;       /* одинаковая высота блока */
@@ -10,6 +12,39 @@
     width: 100%;
     padding: 10px; /* чтобы фото не липло к краям (по желанию) */
 }
+
+
+.card{
+  height: 100%;
+}
+
+  /* Небольшой CSS для улучшения визуала */
+    .product-image-container {
+        position: sticky;
+        top: 20px; /* Фото "прилипает" при скролле */
+    }
+    .spec-row {
+        border-bottom: 1px solid #eee;
+        padding: 8px 0;
+    }
+    .spec-row:last-child {
+        border-bottom: none;
+    }
+    .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 /* LIQUID GLASS STYLES */

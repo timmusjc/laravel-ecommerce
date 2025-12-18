@@ -8,6 +8,25 @@ use Illuminate\Http\Request;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class MainController extends Controller {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+
+
+
     
     public function home() {
         $products = Product::get();

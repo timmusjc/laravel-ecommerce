@@ -3,9 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', [MainController::class, 'home'])->name('home');
+
+Auth::routes();
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Route::get('/categories', [MainController::class, 'categories'])->name('categories');
 
@@ -35,4 +41,9 @@ Route::patch('/cart/update', [CartController::class, 'cartUpdate'])->name('cart.
 Route::get('/category/{slug}', [MainController::class, 'category'])->name('category');
 
 Route::get('/product/{slug}', [MainController::class, 'product'])->name('product');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+});
+
 

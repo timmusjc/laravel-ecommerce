@@ -9,16 +9,17 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class MainController extends Controller {
 
+    
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
+    
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Show the application dashboard.
      *
@@ -26,10 +27,38 @@ class MainController extends Controller {
      */
 
 
-
     
-    public function home() {
-        $products = Product::get();
+    public function home(Request $request) {
+       // 1. Начинаем запрос
+    $query = Product::query();
+
+    // 2. Логика сортировки
+    if ($request->filled('sort')) {
+        switch ($request->sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc'); // Дешевые -> Дорогие
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc'); // Дорогие -> Дешевые
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc'); // Новые -> Старые
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc'); // Старые -> Новые
+                break;
+            default:
+                $query->orderBy('created_at', 'desc'); // По умолчанию новые сверху
+                break;
+        }
+    } else {
+        // Сортировка по умолчанию, если ничего не выбрано
+        $query->orderBy('created_at', 'desc');
+    }
+
+    // 3. Пагинация (например, по 12 товаров на страницу)
+    // withQueryString() нужен, чтобы при переходе на 2-ю страницу сортировка не сбрасывалась
+    $products = $query->paginate(8)->withQueryString();
         return view('home', compact('products'));
     }
 

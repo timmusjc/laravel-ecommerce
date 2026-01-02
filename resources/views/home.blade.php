@@ -10,6 +10,18 @@
 
 <div class="catalog-page py-4 py-md-5">
     <div class="container catalog-container">
+
+        <form action="{{ url()->current() }}" method="GET" class="sort-form">
+                <div class="sort-wrapper">
+                    <label for="sort" class="text-muted m-0">Sortuj:</label>
+                    <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Najnowsze</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Najstarsze</option>
+                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Cena: rosnąco</option>
+                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Cena: malejąco</option>
+                    </select>
+                </div>
+            </form>
         <div class="products-grid">
             @foreach ($products as $product)
                 <div class="product-card">
@@ -58,6 +70,9 @@
                 </div>
             @endforeach
         </div>
+        <div class="d-flex justify-content-center mt-5">
+    {{ $products->links('pagination::bootstrap-5') }}
+</div>
     </div>
 </div>
 

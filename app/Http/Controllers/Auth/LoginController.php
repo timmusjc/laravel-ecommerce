@@ -36,7 +36,6 @@ class LoginController extends Controller
         if (Auth::user()->is_admin) {
             return route('admin.index');
         }
-
         return route('home');
     }
 }

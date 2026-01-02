@@ -112,9 +112,11 @@
                     <span class="summary-value summary-total"><span id="total-price">{{ number_format($total, 2, ',', ' ') }}</span> zł</span>
                 </div>
                 
-                <button class="btn-checkout">
-                    Przejdź do zamówienia
-                </button>
+                <a href="{{ route('checkout') }}">
+                    <div class="btn-checkout text-center">
+                        Przejdź do zamówienia
+                    </div>
+                </a>
             </div>
         </div>
         @endif

@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    public function products(){
-        return $this->belongsToMany(Product::class, 'order_products');
+    protected $fillable = ['user_id', 'status', 'total_price', 'address', 'phone', 'comment'];
+
+    // Заказ принадлежит пользователю
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // В заказе много позиций
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -27,13 +28,6 @@ Auth::routes();
 
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 
-
-
-
-
-
-
-
 Route::post('/cart/add/{id}', [CartController::class, 'cartAdd'])->name('cart.add');
 
 Route::post('/cart/remove/{id}', [CartController::class, 'cartRemove'])->name('cart.remove');
@@ -46,13 +40,21 @@ Route::get('/product/{slug}', [MainController::class, 'product'])->name('product
 
 Route::middleware(['auth', 'admin'])->group(function () 
 {
+    // Главная админки (Заказы)
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
+    
+    // Статус заказа
+    Route::patch('/admin/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [OrderController::class, 'create'])->name('checkout'); // Форма
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');     // Сохранение
+    // Профиль
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // НОВЫЙ МАРШРУТ ДЛЯ ПАРОЛЯ
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 

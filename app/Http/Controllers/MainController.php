@@ -28,46 +28,39 @@ class MainController extends Controller {
 
 
     
+    // ГЛАВНАЯ СТРАНИЦА
     public function home(Request $request) {
-       // 1. Начинаем запрос
-    $query = Product::query();
+        $query = Product::query();
 
-    // 2. Логика сортировки
-    if ($request->filled('sort')) {
-        switch ($request->sort) {
-            case 'price_asc':
-                $query->orderBy('price', 'asc'); // Дешевые -> Дорогие
-                break;
-            case 'price_desc':
-                $query->orderBy('price', 'desc'); // Дорогие -> Дешевые
-                break;
-            case 'newest':
-                $query->orderBy('created_at', 'desc'); // Новые -> Старые
-                break;
-            case 'oldest':
-                $query->orderBy('created_at', 'asc'); // Старые -> Новые
-                break;
-            default:
-                $query->orderBy('created_at', 'desc'); // По умолчанию новые сверху
-                break;
-        }
-    } else {
-        // Сортировка по умолчанию, если ничего не выбрано
-        $query->orderBy('created_at', 'desc');
-    }
+        // Применяем сортировку (вынес в отдельную функцию, см. внизу, или можно дублировать)
+        $this->applySorting($query, $request);
 
-    // 3. Пагинация (например, по 12 товаров на страницу)
-    // withQueryString() нужен, чтобы при переходе на 2-ю страницу сортировка не сбрасывалась
-    $products = $query->paginate(8)->withQueryString();
+        $products = $query->paginate(8)->withQueryString();
         return view('home', compact('products'));
     }
 
+   // ПОИСК (Исправленный)
     public function search(Request $request){
-        $query = $request->input('query');
+        $searchWord = $request->input('query');
 
-        $products = Product::where('name', 'LIKE', "%{$query}%")->orWhere('description', 'LIKE', "%{$query}%")->paginate(12);
+        // 1. Формируем запрос поиска
+        $query = Product::where(function($q) use ($searchWord) {
+            $q->where('name', 'LIKE', "%{$searchWord}%")
+              ->orWhere('description', 'LIKE', "%{$searchWord}%");
+        });
 
-        return view('search', compact('products', 'query'));
+        // 2. Применяем сортировку
+        $this->applySorting($query, $request);
+
+        // 3. Пагинация
+        $products = $query->paginate(8)->withQueryString();
+
+        // 4. ВОЗВРАТ (ИСПРАВЛЕНО):
+        // Передаем данные массивом, так как имена переменных разные ($searchWord -> $query)
+        return view('search', [
+            'products' => $products, 
+            'query' => $searchWord
+        ]);
     }
 
     public function product($slug) {
@@ -89,12 +82,46 @@ class MainController extends Controller {
     }
     
     
-    public function category($slug){
-        $category = Category::where('slug', $slug)->first();
-        $products = $category->products;
+    // КАТЕГОРИЯ
+    public function category($slug, Request $request){
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        // 1. Берем запрос товаров этой категории (важно: скобки (), чтобы получить Builder)
+        $query = $category->products(); 
+
+        // 2. Применяем ту же логику сортировки
+        $this->applySorting($query, $request);
+
+        // 3. Пагинация
+        $products = $query->paginate(8)->withQueryString();
+
         return view('category', compact('category', 'products'));
     }
     
+    // ВСПОМОГАТЕЛЬНЫЙ МЕТОД (чтобы не копировать код 3 раза)
+    private function applySorting($query, Request $request) {
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+    }
 
 
 

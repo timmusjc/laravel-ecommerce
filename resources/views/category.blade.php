@@ -19,6 +19,59 @@
         </div>
         
         @if(count($products) > 0)
+        <div class="sort-dropdown-wrapper">
+                <span class="sort-label">Sortuj:</span>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle sort-dropdown-btn" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        @switch(request('sort'))
+                            @case('price_asc')
+                                Cena: rosnąco
+                            @break
+
+                            @case('price_desc')
+                                Cena: malejąco
+                            @break
+
+                            @case('oldest')
+                                Najstarsze
+                            @break
+
+                            @default
+                                Najnowsze
+                        @endswitch
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'newest' || !request('sort') ? 'active' : '' }}"
+                                href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">
+                                Najnowsze
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'oldest' ? 'active' : '' }}"
+                                href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}">
+                                Najstarsze
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'price_asc' ? 'active' : '' }}"
+                                href="{{ request()->fullUrlWithQuery(['sort' => 'price_asc']) }}">
+                                Cena: rosnąco
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'price_desc' ? 'active' : '' }}"
+                                href="{{ request()->fullUrlWithQuery(['sort' => 'price_desc']) }}">
+                                Cena: malejąco
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <!-- Сетка товаров -->
             <div class="products-grid">
                 @foreach ($products as $product)

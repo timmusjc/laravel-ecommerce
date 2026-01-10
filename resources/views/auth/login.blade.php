@@ -46,8 +46,7 @@
                                    class="form-input @error('password') is-invalid @enderror" 
                                    name="password" 
                                    required 
-                                   autocomplete="current-password"
-                                   placeholder="••••••••">
+                                   autocomplete="current-password">
 
                             @error('password')
                                 <span class="form-error">

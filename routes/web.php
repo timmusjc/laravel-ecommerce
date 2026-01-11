@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 
+
 Route::get('/', [MainController::class, 'home'])->name('home');
 
 // Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -45,6 +46,19 @@ Route::middleware(['auth', 'admin'])->group(function ()
     
     // Статус заказа
     Route::patch('/admin/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+
+    // --- УПРАВЛЕНИЕ ТОВАРАМИ ---
+    
+    // 1. Создание
+    Route::get('/admin/products/create', [AdminController::class, 'createProduct'])->name('admin.products.create');
+    Route::post('/admin/products', [AdminController::class, 'storeProduct'])->name('admin.products.store');
+    
+    // 2. Редактирование (Форма + Сохранение)
+    Route::get('/admin/products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.products.edit');
+    Route::put('/admin/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
+
+    // 3. Удаление
+    Route::delete('/admin/products/{product}', [AdminController::class, 'deleteProduct'])->name('admin.products.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {

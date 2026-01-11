@@ -331,9 +331,9 @@
                 <h1 class="product-title">{{ $product->name }}</h1>
                 
                 <!-- Цена -->
-                <div class="product-price">
+                <span class="product-price">
                     {{ number_format($product->price, 2, ',', ' ') }} zł
-                </div>
+                </span>
                 
                  <!-- Кнопка добавления в корзину -->
                 <form action="{{ route('cart.add', $product) }}" method="POST">

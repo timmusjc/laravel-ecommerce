@@ -2264,3 +2264,364 @@ a {
         flex: 1;
     }
 }
+
+/* ===================================
+   КАТАЛОГИ (главная, поиск, категория)
+   =================================== */
+
+.catalog-page {
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+.catalog-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ===================================
+   HEADER CONTROLS (Сортировка + Добавить товар)
+   =================================== */
+
+.catalog-header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sort-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sort-label {
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Кнопка "Добавить продукт" */
+.btn-add-product {
+    background-color: #111827;
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.btn-add-product:hover {
+    background-color: #1f2937;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.2);
+}
+
+.btn-add-product:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   ADMIN CONTROLS (кнопки на карточках)
+   =================================== */
+
+.admin-controls {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.btn-admin-edit,
+.btn-admin-delete {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-admin-edit {
+    color: #2563eb;
+}
+
+.btn-admin-edit:hover {
+    background-color: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-admin-delete {
+    color: #dc2626;
+}
+
+.btn-admin-delete:hover {
+    background-color: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-admin-edit:active,
+.btn-admin-delete:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   PRODUCTS GRID
+   =================================== */
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.product-image-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.product-name:hover {
+    color: #374151;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    gap: 1rem;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.btn-add-cart {
+    background-color: #111827;
+    border: none;
+    color: white;
+    padding: 0.625rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.btn-add-cart:hover {
+    background-color: #1f2937;
+    transform: translateY(-1px);
+}
+
+.btn-add-cart:active {
+    transform: translateY(0);
+}
+
+.btn-add-cart svg {
+    width: 18px;
+    height: 18px;
+}
+
+.no-image {
+    color: #d1d5db;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================================
+   ЗАГОЛОВКИ СТРАНИЦ
+   =================================== */
+
+.search-header,
+.category-header {
+    margin-bottom: 2rem;
+}
+
+.search-title,
+.category-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.search-query {
+    font-weight: 700;
+    color: #374151;
+}
+
+.search-count,
+.category-count {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 400;
+}
+
+/* ===================================
+   ПУСТЫЕ СОСТОЯНИЯ
+   =================================== */
+
+.no-results,
+.empty-cart,
+.empty-category {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    min-width: 70vw;
+}
+
+.no-results-icon,
+.empty-cart-icon,
+.empty-category-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    color: #d1d5db;
+    min-width: 10rem;
+}
+
+.no-results-title,
+.empty-cart-title,
+.empty-category-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.75rem;
+}
+
+.no-results-text,
+.empty-cart-text,
+.empty-category-text {
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 576px) {
+    .catalog-header-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-add-product {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .admin-controls {
+        top: 8px;
+        right: 8px;
+    }
+    
+    .btn-admin-edit,
+    .btn-admin-delete {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .btn-admin-edit svg,
+    .btn-admin-delete svg {
+        width: 14px;
+        height: 14px;
+    }
+}

@@ -331,21 +331,15 @@
                 <h1 class="product-title">{{ $product->name }}</h1>
                 
                 <!-- Цена -->
-                <span class="product-price">
+                <div class="product-price" style="margin-bottom: 2rem">
                     {{ number_format($product->price, 2, ',', ' ') }} zł
-                </span>
+                </div>
                 
                  <!-- Кнопка добавления в корзину -->
                 <form action="{{ route('cart.add', $product) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden">
-                        
-                    
-                          
-                            <div class="fw-bold text-uppercase">
-                                <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
-                            </div>
-                        
+                    <button type="submit" class="btn-add-cart">
+                            <span class="d-none d-sm-inline">DODAJ DO KOSZYKA</span>
                     </button>
                 </form>
                 

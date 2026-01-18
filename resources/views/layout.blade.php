@@ -7,20 +7,15 @@
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" type="image/png" href="{{ asset('apple_black.png') }}">
-
-
 </head>
 
-<body class="">
-    <!-- Хедер -->
+<body>
     <header class="site-header">
         <div class="header-container">
-            <!-- Логотип -->
             <a href="{{ route('home') }}" class="site-logo">
                 TEppLE
             </a>
-
-            <!-- Поиск -->
+            <!-- Wyszukiwanie -->
             <form action="{{ route('search') }}" method="GET" class="search-form">
                 <input type="search" name="query" class="search-input" placeholder="Szukaj" aria-label="Szukaj">
                 <button type="submit" class="search-btn" aria-label="Szukaj">
@@ -30,8 +25,7 @@
                     </svg>
                 </button>
             </form>
-
-            <!-- Навигация -->
+            <!-- Nawigacja -->
             <nav>
                 <ul class="main-nav">
                     <li>
@@ -40,7 +34,7 @@
                                 <path
                                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                             </svg>
-                            {{-- Опционально: счетчик товаров в корзине --}}
+                            {{-- Licznik produktów w koszyku --}}
                             @if (session('cart') && count(session('cart')) > 0)
                                 <span class="cart-badge">{{ count(session('cart')) }}</span>
                             @endif
@@ -54,7 +48,6 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Kategorie
                         </a>
-
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                             <li><a class="dropdown-item fw-bold" href="{{ route('categories') }}">Wszystkie
@@ -223,18 +216,17 @@
     </footer>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuBtn = document.querySelector('.mobile-menu-btn');
-        const navMenu = document.querySelector('.main-nav');
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('.main-nav');
 
-        if (menuBtn && navMenu) {
-            menuBtn.addEventListener('click', function() {
-                // Переключаем класс 'active' у меню
-                navMenu.classList.toggle('active');
-            });
-        }
-    });
-</script>
+            if (menuBtn && navMenu) {
+                menuBtn.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

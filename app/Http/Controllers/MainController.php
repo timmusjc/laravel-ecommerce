@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class MainController extends Controller {
@@ -35,7 +36,10 @@ class MainController extends Controller {
         // Применяем сортировку (вынес в отдельную функцию, см. внизу, или можно дублировать)
         $this->applySorting($query, $request);
 
-        $products = $query->paginate(8)->withQueryString();
+        if (auth()->user()->is_admin)
+        $products = $query->paginate(7)->withQueryString();
+        else
+            $products = $query->paginate(8)->withQueryString();
         return view('home', compact('products'));
     }
 
@@ -122,15 +126,6 @@ class MainController extends Controller {
             $query->orderBy('created_at', 'desc');
         }
     }
-
-
-
-
-
-
-
-
-
 
     public function opinie_check(Request $request) {
         $valid = $request->validate([

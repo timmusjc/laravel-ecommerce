@@ -8,12 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
-
-
 Route::get('/', [MainController::class, 'home'])->name('home');
-
-// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 
 Route::get('/categories', [MainController::class, 'categories'])->name('categories');
 

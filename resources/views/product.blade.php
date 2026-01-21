@@ -7,6 +7,58 @@
 @section('main_content')
 
 <style>
+    .admin-save-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #f59e0b;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.admin-save-button:hover {
+    background-color: #d97706;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+}
+
+.admin-save-button:active {
+    transform: translateY(0);
+}
+
+    .admin-cancel-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 14rem;
+    background-color: #6b7280;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.admin-cancel-button:hover {
+    background-color: #4b5563;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(107, 114, 128, 0.4);
+}
    /* ===================================
    КАРУСЕЛЬ НА СТРАНИЦЕ ТОВАРА
    =================================== */
@@ -245,9 +297,9 @@
 }
 </style>
 
+
 <div class="container product-page py-4 py-md-5">
     <div class="row g-4 g-lg-5">
-        
         <!-- Левая колонка - Изображение/Карусель -->
         <div class="col-lg-6">
             @if($product->images->count() > 0)
@@ -338,9 +390,12 @@
                  <!-- Кнопка добавления в корзину -->
                 <form action="{{ route('cart.add', $product) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn-add-cart">
-                            <span class="d-none d-sm-inline">DODAJ DO KOSZYKA</span>
+                      <button type="submit" class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden">
+                            <div class="fw-bold text-uppercase">
+                                <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
+
                     </button>
+
                 </form>
                 
                 <!-- Описание товара -->
@@ -373,6 +428,36 @@
         </div>
         
     </div>
+     <!-- Кнопки управления -->
+       
+
+        @auth
+                   @if (auth()->user()->is_admin)
+                           <a href="{{ route('admin.products.edit', $product) }}" class="admin-cancel-button"
+                               title="Edytuj">
+                               <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                   <path
+                                       d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                               </svg>
+                               Edytuj
+                           </a>
+                           <form action="{{ route('admin.products.destroy', $product) }}" method="POST"
+                               onsubmit="return confirm('Czy na pewno chcesz usunąć ten produkt?');">
+                               @csrf
+                               @method('DELETE')
+                               <button type="submit" class="admin-save-button" title="Usuń">
+                                   <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                       <path
+                                           d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                       <path fill-rule="evenodd"
+                                           d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                   </svg>
+                                   Usuń
+                               </button>
+                           </form>
+                       
+                   @endif
+               @endauth
 </div>
 
 <!-- Модальное окно для просмотра фото -->

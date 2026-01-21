@@ -80,6 +80,11 @@
                                     Zapomniałeś hasło?
                                 </a>
                             @endif
+                             @if (Route::has('register'))
+                                <a class="link-forgot" href="{{ route('register') }}">
+                                    Nie masz jeszcze konta?
+                                </a>
+                            @endif
                         </div>
                     </form>
                 </div>

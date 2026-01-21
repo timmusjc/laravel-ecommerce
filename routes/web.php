@@ -34,36 +34,40 @@ Route::get('/category/{slug}', [MainController::class, 'category'])->name('categ
 
 Route::get('/product/{slug}', [MainController::class, 'product'])->name('product');
 
-Route::middleware(['auth', 'admin'])->group(function () 
-{
-    // Главная админки (Заказы)
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    
-    // Статус заказа
-    Route::patch('/admin/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+//Administrator
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Główna strona (zamówienia)
+    Route::get('/', [AdminController::class, 'index'])->name('index');
 
-    // --- УПРАВЛЕНИЕ ТОВАРАМИ ---
-    
-    // 1. Создание
-    Route::get('/admin/products/create', [AdminController::class, 'createProduct'])->name('admin.products.create');
-    Route::post('/admin/products', [AdminController::class, 'storeProduct'])->name('admin.products.store');
-    
-    // 2. Редактирование (Форма + Сохранение)
-    Route::get('/admin/products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.products.edit');
-    Route::put('/admin/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
+    // Status zamówienia
+    Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
 
-    // 3. Удаление
-    Route::delete('/admin/products/{product}', [AdminController::class, 'deleteProduct'])->name('admin.products.destroy');
+    // --- Zarządzanie produktami ---
+    // Tworzenie
+    Route::get('/products/create', [AdminController::class, 'createProduct'])->name('products.create');
+    Route::post('/products', [AdminController::class, 'storeProduct'])->name('products.store');
+
+    // Edytowanie
+    Route::get('/products/{product}/edit', [AdminController::class, 'editProduct'])->name('products.edit');
+    Route::put('/products/{product}', [AdminController::class, 'updateProduct'])->name('products.update');
+
+    // Usuwanie
+    Route::delete('/products/{product}', [AdminController::class, 'deleteProduct'])->name('products.destroy');
+    
+    // Zarządzanie kontami
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::patch('/users/{user}/toggle-role', [App\Http\Controllers\AdminController::class, 'toggleRole'])->name('users.toggleRole');
 });
 
-Route::middleware(['auth'])->group(function () {
+    // Dla zalogowanych
+    Route::middleware(['auth'])->group(function () {
+    // Zamówienia
     Route::get('/checkout', [OrderController::class, 'create'])->name('checkout'); // Форма
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');     // Сохранение
-    // Профиль
+    // Konto
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // НОВЫЙ МАРШРУТ ДЛЯ ПАРОЛЯ
+    // Nowe hasło
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
-
-

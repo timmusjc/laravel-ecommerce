@@ -39,7 +39,7 @@ class CartController extends Controller
     }
 
     session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Dodano do koszyka!');
+    return redirect()->route('cart');
 
     }
 

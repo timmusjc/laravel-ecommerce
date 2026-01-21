@@ -36,10 +36,14 @@ class MainController extends Controller {
         // Применяем сортировку (вынес в отдельную функцию, см. внизу, или можно дублировать)
         $this->applySorting($query, $request);
 
-        if (auth()->user()->is_admin)
-        $products = $query->paginate(7)->withQueryString();
-        else
-            $products = $query->paginate(8)->withQueryString();
+        // По умолчанию 8 товаров
+        $perPage = 8;
+
+       if (auth()->user()?->is_admin) {
+            $perPage = 7;
+        }
+
+        $products = $query->paginate($perPage)->withQueryString();
         return view('home', compact('products'));
     }
 

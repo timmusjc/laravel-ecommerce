@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Attribute; // Модель характеристик\
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -161,6 +162,46 @@ if ($request->has('specs')) {
         return redirect()->route('home')->with('success', 'Produkt zaktualizowany!');
     }
     
+    public function users()
+{
+    // Берем всех пользователей с пагинацией (по 10 на страницу)
+    // Сортируем от новых к старым
+    $users = User::orderBy('created_at', 'desc')->paginate(10);
+    
+    return view('admin.users', compact('users'));
+}
+
+public function deleteUser(User $user)
+{
+    // Защита: Нельзя удалить самого себя
+    if ($user->id === auth()->id()) {
+        return redirect()->back()->with('error', 'Nie możesz usunąć własnego konta!');
+    }
+
+    // Удаляем пользователя
+    $user->delete();
+
+    return redirect()->back()->with('success', 'Użytkownik został usunięty.');
+}
+
+public function toggleRole(User $user)
+{
+    // Защита: Нельзя менять роль самому себе
+    if ($user->id === auth()->id()) {
+        return redirect()->back()->with('error', 'Nie możesz zmienić uprawnień dla samego siebie!');
+    }
+
+    // Переключаем статус (если true -> станет false, если false -> станет true)
+    $user->is_admin = !$user->is_admin;
+    $user->save();
+
+    // Формируем сообщение в зависимости от того, кем он стал
+    $message = $user->is_admin 
+        ? "Użytkownik $user->name jest teraz Administratorem." 
+        : "Użytkownik $user->name jest teraz Klientem.";
+
+    return redirect()->back()->with('success', $message);
+}
 }
 
 

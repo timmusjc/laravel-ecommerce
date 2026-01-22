@@ -14,7 +14,7 @@ class ProfileController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        
+
         // Получаем заказы пользователя (с товарами)
         // latest() - сортировка от новых к старым
         $orders = $user->orders()->with('items.product')->latest()->get();

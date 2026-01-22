@@ -8,15 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class MainController extends Controller {
+class MainController extends Controller
+{
 
-    
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    
+
     // public function __construct()
     // {
     //     $this->middleware('auth');
@@ -28,9 +29,10 @@ class MainController extends Controller {
      */
 
 
-    
+
     // ГЛАВНАЯ СТРАНИЦА
-    public function home(Request $request) {
+    public function home(Request $request)
+    {
         $query = Product::query();
 
         // Применяем сортировку (вынес в отдельную функцию, см. внизу, или можно дублировать)
@@ -39,7 +41,7 @@ class MainController extends Controller {
         // По умолчанию 8 товаров
         $perPage = 8;
 
-       if (auth()->user()?->is_admin) {
+        if (auth()->user()?->is_admin) {
             $perPage = 7;
         }
 
@@ -47,14 +49,15 @@ class MainController extends Controller {
         return view('home', compact('products'));
     }
 
-   // ПОИСК (Исправленный)
-    public function search(Request $request){
+    // ПОИСК (Исправленный)
+    public function search(Request $request)
+    {
         $searchWord = $request->input('query');
 
         // 1. Формируем запрос поиска
-        $query = Product::where(function($q) use ($searchWord) {
+        $query = Product::where(function ($q) use ($searchWord) {
             $q->where('name', 'LIKE', "%{$searchWord}%")
-              ->orWhere('description', 'LIKE', "%{$searchWord}%");
+                ->orWhere('description', 'LIKE', "%{$searchWord}%");
         });
 
         // 2. Применяем сортировку
@@ -66,36 +69,41 @@ class MainController extends Controller {
         // 4. ВОЗВРАТ (ИСПРАВЛЕНО):
         // Передаем данные массивом, так как имена переменных разные ($searchWord -> $query)
         return view('search', [
-            'products' => $products, 
+            'products' => $products,
             'query' => $searchWord
         ]);
     }
 
-    public function product($slug) {
+    public function product($slug)
+    {
         $product = Product::where('slug', $slug)->first();
         return view('product', compact('product'));
     }
-    public function categories() {
+    public function categories()
+    {
         $categories = Category::get();
         return view('categories', compact('categories'));
     }
 
-    
-    public function about() {
+
+    public function about()
+    {
         return view('about');
     }
-    
-    public function opinie() {
+
+    public function opinie()
+    {
         return view('opinie');
     }
-    
-    
+
+
     // КАТЕГОРИЯ
-    public function category($slug, Request $request){
+    public function category($slug, Request $request)
+    {
         $category = Category::where('slug', $slug)->firstOrFail();
 
         // 1. Берем запрос товаров этой категории (важно: скобки (), чтобы получить Builder)
-        $query = $category->products(); 
+        $query = $category->products();
 
         // 2. Применяем ту же логику сортировки
         $this->applySorting($query, $request);
@@ -105,9 +113,10 @@ class MainController extends Controller {
 
         return view('category', compact('category', 'products'));
     }
-    
+
     // ВСПОМОГАТЕЛЬНЫЙ МЕТОД (чтобы не копировать код 3 раза)
-    private function applySorting($query, Request $request) {
+    private function applySorting($query, Request $request)
+    {
         if ($request->filled('sort')) {
             switch ($request->sort) {
                 case 'price_asc':
@@ -131,7 +140,8 @@ class MainController extends Controller {
         }
     }
 
-    public function opinie_check(Request $request) {
+    public function opinie_check(Request $request)
+    {
         $valid = $request->validate([
             'email' => 'required|email|min:4|max:100',
             'subject' => 'required|min:4|max:100',

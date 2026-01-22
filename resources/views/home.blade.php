@@ -6,7 +6,85 @@
 
 @section('main_content')
     <div class="catalog-page py-4 py-md-5">
+        <div class="container-fluid p-0 mb-5"> <div class="container catalog-container"> <div id="heroCarousel" class="carousel slide carousel-fade hero-card shadow-lg" data-bs-ride="carousel" data-bs-interval="5000">
+            
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+
+            <div class="carousel-inner">
+                
+                <div class="carousel-item active hero-item">
+                    <img src="hero_iphone.jpg" 
+                         class="d-block w-100 hero-img" 
+                         alt="iPhone 15 Pro">
+                    
+                    <div class="carousel-caption hero-caption">
+                        <h2 class="hero-title text-white">iPhone 17 Pro Max</h2>
+                        <p class="hero-subtitle text-white-50">Tytan. Tak mocny. Tak lekki. Tak Pro.</p>
+                        <div class="hero-btns">
+                            <a href="product/apple_iphone_17_pro_max_256gb" class="btn btn-primary btn-apple rounded-pill px-4 py-2">
+                                Kup teraz
+                            </a>
+                            <a href="{{ route('category', 'smartfony') }}" class="btn btn-link text-white text-decoration-none">
+                                Zobacz wszystkie >
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-item">
+                    <img src="hero_macbook.jpg" 
+                         class="d-block w-100 hero-img" 
+                         alt="MacBook">
+                    
+                    <div class="carousel-caption hero-caption text-dark">
+                        <h2 class="hero-title text-dark">MacBook Air 15"</h2>
+                        <p class="hero-subtitle text-secondary">Imponująco duży. Niewiarygodnie smukły.</p>
+                        <div class="hero-btns">
+                            <a href="#" class="btn btn-dark btn-apple rounded-pill px-4 py-2">
+                                Sprawdź
+                            </a>
+                            <a href="#" class="btn btn-link text-dark text-decoration-none">
+                                Dowiedz się więcej >
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-item">
+                    <img src="https://images.unsplash.com/photo-1606220838315-056192d5e927?q=80&w=2070&auto=format&fit=crop" 
+                         class="d-block w-100 hero-img" 
+                         alt="Akcesoria">
+                    
+                    <div class="carousel-caption hero-caption">
+                        <h2 class="hero-title text-white">Akcesoria</h2>
+                        <p class="hero-subtitle text-white-50">Dopełnij swój styl.</p>
+                        <div class="hero-btns">
+                            <a href="#" class="btn btn-light btn-apple rounded-pill px-4 py-2">
+                                Przeglądaj
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle bg-opacity-25 p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Poprzedni</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle bg-opacity-25 p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Następny</span>
+            </button>
+        </div>
+    </div>
+</div>
         <div class="container catalog-container">
+            
             <div class="catalog-header-controls">
                 <div class="sort-dropdown-wrapper">
                     <span class="sort-label">Sortuj:</span>
@@ -176,3 +254,82 @@
         </div>
     </div>
 @endsection
+
+<style>
+    /* === HERO SLIDER STYLES === */
+
+/* Скругляем углы всего слайдера */
+.hero-card {
+    border-radius: 20px;
+    overflow: hidden; /* Важно, чтобы картинка не вылезала за скругления */
+}
+
+/* Фиксированная высота слайдера */
+.hero-item {
+    height: 550px; /* Высота на компьютере */
+    position: relative;
+    background-color: #000; /* Фон, если картинка не прогрузится */
+}
+
+/* МАГИЯ: Картинка не растягивается, а обрезается */
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ключевое свойство! */
+    object-position: center; /* Центрируем изображение */
+}
+
+/* Текст поверх картинки */
+.hero-caption {
+    bottom: 60px; /* Отступ снизу */
+    left: 10%;
+    right: 10%;
+    text-align: center;
+    z-index: 10;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.2); /* Тень для читаемости */
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+/* Кнопки */
+.btn-apple {
+    font-weight: 600;
+    padding: 10px 24px;
+    transition: transform 0.2s ease;
+}
+
+.btn-apple:hover {
+    transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .hero-item {
+        height: 450px; /* Уменьшаем высоту на телефоне */
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-img {
+        /* На мобильных часто лучше фокусироваться на центре или верхе картинки */
+        object-position: center top; 
+    }
+}
+    </style>

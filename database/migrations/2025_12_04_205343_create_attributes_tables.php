@@ -22,14 +22,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('attribute_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('value');
             $table->timestamps();
         });
     }
-    
-    
+
+
 
     /**
      * Reverse the migrations.

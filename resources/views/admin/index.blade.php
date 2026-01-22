@@ -1,130 +1,115 @@
 @extends('layout')
 
-@section('title', 'Zarządzanie zamówieniami')
+@section('title', 'Panel Administratora')
 
 @section('main_content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 fw-bold">Wszystkie zamówienia</h1>
+    <h1 class="mb-4 fw-bold">Panel Administratora</h1>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase mb-2 opacity-75">Zamówienia</h6>
+                    <h2 class="fw-bold">{{ $stats['orders_count'] }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase mb-2 opacity-75">Przychód (opłacone)</h6>
+                    <h2 class="fw-bold">{{ number_format($stats['revenue'], 2, ',', ' ') }} zł</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-info text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase mb-2 opacity-75">Użytkownicy</h6>
+                    <h2 class="fw-bold">{{ $stats['users_count'] }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-warning text-dark h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase mb-2 opacity-75">Produkty</h6>
+                    <h2 class="fw-bold">{{ $stats['products_count'] }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-4">Zarządzanie sklepem</h3>
+
+    <div class="row g-4">
         
-    </div>
-
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    <div class="orders-list">
-        @foreach($orders as $order)
-        <div class="card border mb-3 shadow-sm rounded-3 overflow-hidden">
-            
-            <div class="card-header bg-white p-3">
-                <div class="row align-items-center">
-                    
-                    <div class="col-md-4 d-flex align-items-center mb-2 mb-md-0 pointer" 
-                         data-bs-toggle="collapse" 
-                         data-bs-target="#order{{ $order->id }}" 
-                         style="cursor: pointer;">
-                        
-                        <div class="me-3 position-relative">
-                            @if($order->user->avatar)
-                                <img src="{{ asset('storage/' . $order->user->avatar) }}" 
-                                     class="rounded-circle border" width="45" height="45" style="object-fit: cover;">
-                            @else
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" 
-                                     style="width: 45px; height: 45px; font-weight: bold;">
-                                    {{ substr($order->user->name, 0, 1) }}
-                                </div>
-                            @endif
+        <div class="col-md-4">
+            <a href="{{ route('admin.orders') }}" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3 text-primary">
+                            <i class="bi bi-basket3-fill fs-1"></i>
                         </div>
-                        <div>
-                            <div class="fw-bold text-dark">{{ $order->user->name }}</div>
-                            <div class="text-muted small">#{{ $order->id }} &bull; {{ $order->created_at->format('d.m.Y H:i') }}</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 text-md-center mb-2 mb-md-0 pointer"
-                         data-bs-toggle="collapse" 
-                         data-bs-target="#order{{ $order->id }}"
-                         style="cursor: pointer;">
-                        <span class="fw-bold fs-5">{{ number_format($order->total_price, 2, ',', ' ') }} zł</span>
-                    </div>
-
-                    <div class="col-md-5">
-                        <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST" class="d-flex gap-2 justify-content-md-end">
-                            @csrf
-                            @method('PATCH')
-                            
-                            <select name="status" class="form-select form-select-sm fw-bold border-{{ $order->status == 'new' ? 'primary' : ($order->status == 'completed' ? 'success' : 'secondary') }}" 
-                                    style="max-width: 200px;" 
-                                    onchange="this.form.submit()">
-                                <option value="new" {{ $order->status == 'new' ? 'selected' : '' }}>🔵 Nowe</option>
-                                <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>🟠 W trakcie</option>
-                                <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>🟢 Zrealizowane</option>
-                                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>⚫ Anulowane</option>
-                            </select>
-                            
-                            
-                        </form>
+                        <h5 class="card-title text-dark fw-bold">Zamówienia</h5>
+                        <p class="text-muted small">Przeglądaj i zmieniaj statusy zamówień</p>
                     </div>
                 </div>
-            </div>
+            </a>
+        </div>
 
-            <div id="order{{ $order->id }}" class="collapse">
-                <div class="card-body bg-light">
-                    
-                    <div class="row">
-                        <div class="col-md-4 border-end-md mb-3">
-                            <h6 class="text-uppercase text-muted small fw-bold mb-3">Dane klienta</h6>
-                            <ul class="list-unstyled small">
-                                <li class="mb-2"><i class="bi bi-envelope me-2"></i> {{ $order->user->email }}</li>
-                                <li class="mb-2"><i class="bi bi-telephone me-2"></i> {{ $order->phone }}</li>
-                                <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> {{ $order->address }}</li>
-                                @if($order->comment)
-                                    <li class="mt-3 p-2 bg-white rounded border">
-                                        <em>"{{ $order->comment }}"</em>
-                                    </li>
-                                @endif
-                            </ul>
+        <div class="col-md-4">
+            <a href="{{ route('admin.users') }}" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3 text-info">
+                            <i class="bi bi-people-fill fs-1"></i>
                         </div>
-
-                        <div class="col-md-8">
-                            <h6 class="text-uppercase text-muted small fw-bold mb-3">Zawartość zamówienia</h6>
-                            <div class="d-flex flex-column gap-2">
-                                @foreach($order->items as $item)
-                                <div class="d-flex align-items-center bg-white p-2 rounded border">
-                                    <div style="width: 40px; height: 40px;" class="me-3 flex-shrink-0">
-                                        @if($item->product && $item->product->image)
-                                            <img src="{{ asset('storage/'.$item->product->image) }}" class="w-100 h-100 object-fit-contain">
-                                        @else
-                                            <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white small">?</div>
-                                        @endif
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-medium small">
-                                            {{ $item->product ? $item->product->name : 'Produkt usunięty' }}
-                                        </div>
-                                    </div>
-                                    <div class="text-end ms-3">
-                                        <div class="small text-muted">{{ $item->quantity }} szt.</div>
-                                        <div class="fw-bold small">{{ number_format($item->price, 2) }} zł</div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
+                        <h5 class="card-title text-dark fw-bold">Użytkownicy</h5>
+                        <p class="text-muted small">Zarządzaj kontami klientów i administratorów</p>
                     </div>
+                </div>
+            </a>
+        </div>
 
+        <div class="col-md-4">
+            <a href="{{ route('admin.products.create') }}" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3 text-success">
+                            <i class="bi bi-plus-circle-fill fs-1"></i>
+                        </div>
+                        <h5 class="card-title text-dark fw-bold">Dodaj produkt</h5>
+                        <p class="text-muted small">Wprowadź nowy asortyment do sklepu</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 border-dashed shadow-none bg-light d-flex align-items-center justify-content-center">
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-hammer fs-1"></i>
+                    <h5 class="mt-3">Wkrótce...</h5>
                 </div>
             </div>
         </div>
-        @endforeach
-    </div>
 
-    <div class="mt-4 d-flex justify-content-center">
-        {{ $orders->links() }}
     </div>
 </div>
+
+<style>
+    /* Эффект при наведении на карточку */
+    .hover-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .border-dashed {
+        border: 2px dashed #dee2e6 !important;
+    }
+</style>
 @endsection

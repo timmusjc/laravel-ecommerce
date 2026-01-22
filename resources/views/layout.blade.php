@@ -15,6 +15,17 @@
             <a href="{{ route('home') }}" class="site-logo">
                 TEppLE
             </a>
+            <div class="header-actions">
+    <!-- кнопка поиска -->
+    <button class="icon-btn search-toggle">
+        🔍
+    </button>
+            <div class="mobile-search" id="mobileSearch">
+    <form action="/search">
+        <input type="text" name="q" class="search-input" placeholder="Szukaj…">
+        <button class="search-btn">🔍</button>
+    </form>
+</div>
             <!-- Wyszukiwanie -->
             <form action="{{ route('search') }}" method="GET" class="search-form">
                 <input type="search" name="query" class="search-input" placeholder="Szukaj" aria-label="Szukaj">
@@ -220,12 +231,21 @@
             const menuBtn = document.querySelector('.mobile-menu-btn');
             const navMenu = document.querySelector('.main-nav');
 
+            
+
             if (menuBtn && navMenu) {
                 menuBtn.addEventListener('click', function() {
                     navMenu.classList.toggle('active');
                 });
             }
         });
+
+        const searchBtn = document.querySelector('.search-toggle');
+const searchOverlay = document.getElementById('mobileSearch');
+
+searchBtn.addEventListener('click', () => {
+    searchOverlay.classList.toggle('active');
+});
     </script>
 </body>
 

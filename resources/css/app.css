@@ -117,6 +117,7 @@ a {
 }
 
 .header-container {
+     position: relative;
     max-width: 1400px;
     margin: 0 auto;
     padding: 1rem 1.5rem;
@@ -896,6 +897,7 @@ a {
     }
     
     .search-form {
+          display: none;
         order: 3;
         flex-basis: 100%;
         max-width: 100%;
@@ -903,6 +905,40 @@ a {
     
     .main-nav {
         gap: 0.25rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        background: white;
+        flex-direction: column;
+        align-items: stretch;
+
+        padding: 0.5rem 0;
+        gap: 0;
+
+        display: none;
+        z-index: 1000;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .main-nav.active {
+        display: flex;
+    }
+
+    /* показываем ссылки */
+    .main-nav.active .nav-link,
+    .main-nav.active .dropdown {
+        display: block;
+    }
+
+    /* стили пунктов */
+    .main-nav li {
+        width: 100%;
+    }
+
+    .main-nav a {
+        display: block;
+        padding: 0.75rem 1rem;
     }
     
     .nav-link {
@@ -928,6 +964,13 @@ a {
     }
 }
 
+.mobile-menu-btn {
+        display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    }
+
 @media (max-width: 767px) {
     .header-container {
         padding: 1rem;
@@ -937,14 +980,10 @@ a {
         font-size: 1.25rem;
     }
     
-    .main-nav .nav-link:not(.cart-link) {
-        display: none;
-    }
     
     .mobile-menu-btn {
         display: block;
     }
-    
     
     
     .products-grid {
@@ -2881,4 +2920,47 @@ select.select-inline {
     select.editable-category {
         font-size: 0.8125rem;
     }
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: #f3f4f6;
+}
+
+.mobile-search {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.98);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+}
+
+.mobile-search.active {
+    display: flex;
+}
+
+.mobile-search form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    gap: 0.5rem;
 }

@@ -16,10 +16,6 @@ Route::get('/search', [MainController::class, 'search'])->name('search');
 
 Route::get('/about', [MainController::class, 'about'])->name('about');
 
-Route::get('/opinie', [MainController::class, 'opinie'])->name('opinie');
-
-Route::post('/opinie/check', [MainController::class, 'opinie_check']);
-
 Auth::routes();
 
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
@@ -61,6 +57,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
     Route::patch('/users/{user}/toggle-role', [App\Http\Controllers\AdminController::class, 'toggleRole'])->name('users.toggleRole');
+
+
+    Route::get('/categories/create', [AdminController::class, 'createCategory'])
+        ->name('categories.create');
+
+    Route::post('/categories', [AdminController::class, 'storeCategory'])
+        ->name('categories.store');
+
+    Route::get('/categories/{category}/edit', [AdminController::class, 'editCategory'])
+        ->name('categories.edit');
+
+    Route::put('/categories/{category}', [AdminController::class, 'updateCategory'])
+        ->name('categories.update');
+
+    Route::delete('/categories/{category}', [AdminController::class, 'deleteCategory'])
+        ->name('categories.destroy');
 });
 
 // Dla zalogowanych

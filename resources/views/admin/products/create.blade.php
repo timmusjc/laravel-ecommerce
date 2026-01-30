@@ -4,585 +4,741 @@
 
 @section('main_content')
 
-<style>
-/* ===================================
-   КАРУСЕЛЬ НА СТРАНИЦЕ ТОВАРА
-   =================================== */
+    <style>
+        /* ====== Базовый стиль (как в edit) ====== */
+        .product-carousel-wrapper {
+            width: 100%;
+        }
 
-.product-carousel-wrapper {
-    width: 100%;
-}
+        .carousel {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
 
-/* Контейнер карусели */
-.carousel {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* Квадратное соотношение 1:1 */
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
+        .carousel-inner {
+            position: absolute;
+            inset: 0;
+        }
 
-.carousel-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+        .carousel-item {
+            height: 100%;
+        }
 
-.carousel-item {
-    height: 100%;
-}
+        .carousel-image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
 
-.carousel-image-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-}
+        .carousel-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
 
-.carousel-image-container img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
+        .product-single-image {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-/* Одиночное фото (без карусели) */
-.product-single-image {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-}
+        .product-single-image .carousel-image-container {
+            position: absolute;
+            inset: 0;
+        }
 
-.product-single-image .carousel-image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+        .carousel-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: .75rem;
+        }
 
-/* Миниатюры */
-.carousel-thumbnails {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 0.75rem;
-}
+        .thumbnail-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
 
-.thumbnail-item {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* Квадрат */
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 6px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+        .thumbnail-item:hover {
+            border-color: #9ca3af;
+        }
 
-.thumbnail-item:hover {
-    border-color: #9ca3af;
-}
+        .thumbnail-item.active {
+            border-color: #111827;
+            box-shadow: 0 0 0 1px #111827;
+        }
 
-.thumbnail-item.active {
-    border-color: #111827;
-    box-shadow: 0 0 0 1px #111827;
-}
+        .thumbnail-item img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: .5rem;
+        }
 
-.thumbnail-item img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 0.5rem;
-}
+        /* ====== Модалка (как в edit) ====== */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn .3s ease;
+        }
 
-/* ЗАГЛУШКА ДЛЯ ЗАГРУЗКИ ФОТО */
-.image-upload-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: #f9fafb;
-    border: 2px dashed #d1d5db;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-.image-upload-placeholder:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-}
+            to {
+                opacity: 1;
+            }
+        }
 
-.image-upload-placeholder svg {
-    width: 64px;
-    height: 64px;
-    color: #d1d5db;
-    margin-bottom: 1rem;
-}
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            animation: zoomIn .3s ease;
+        }
 
-.image-upload-placeholder .upload-text {
-    color: #6b7280;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
+        @keyframes zoomIn {
+            from {
+                transform: scale(.8);
+            }
 
-.image-preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 2rem;
-    display: none;
-}
+            to {
+                transform: scale(1);
+            }
+        }
 
-.thumbnail-upload-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: #f9fafb;
-    border: 2px dashed #d1d5db;
-    transition: all 0.3s ease;
-}
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 3rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: opacity .2s ease;
+            line-height: 1;
+            z-index: 10001;
+        }
 
-.thumbnail-upload-placeholder:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-}
+        .modal-close:hover {
+            opacity: .7;
+        }
 
-.thumbnail-upload-placeholder svg {
-    width: 24px;
-    height: 24px;
-    color: #d1d5db;
-}
+        /* ====== Поля как в edit (крупно/красиво) ====== */
+        .editable-like {
+            border: 2px dashed transparent;
+            border-radius: 10px;
+            transition: all .2s ease;
+            background: transparent;
+        }
 
-/* РЕДАКТИРУЕМЫЕ ПОЛЯ В СТИЛЕ СТРАНИЦЫ ТОВАРА */
-.editable-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-    border: 2px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: 100%;
-}
+        .editable-like:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
 
-.editable-title:focus {
-    outline: none;
-    border-color: #111827;
-    background: #f9fafb;
-}
+        .product-title-input {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+            padding: .35rem .6rem;
+            width: 100%;
+        }
 
-.editable-price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-    border: 2px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: auto;
-    display: inline-block;
-    min-width: 150px;
-}
+        .price-wrap {
+            position: relative;
+            display: inline-block;
+        }
 
-.editable-price:focus {
-    outline: none;
-    border-color: #111827;
-    background: #f9fafb;
-}
+        .product-price-input {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+            padding: .35rem 2.2rem .35rem .6rem;
+            width: 220px;
+        }
 
-.editable-description {
-    color: #4b5563;
-    line-height: 1.6;
-    margin: 0;
-    border: 2px dashed transparent;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: 100%;
-    min-height: 120px;
-    font-family: inherit;
-    resize: vertical;
-}
+        .price-suffix {
+            position: absolute;
+            right: .7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+            color: #111827;
+            pointer-events: none;
+        }
 
-.editable-description:focus {
-    outline: none;
-    border-color: #111827;
-    background: white;
-}
+        .edit-category {
+            width: auto;
+            min-width: 220px;
+            padding: .45rem .6rem;
+            font-weight: 600;
+            color: #111827;
+            background: transparent;
+            border-radius: 10px;
+        }
 
-.editable-category {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #6b7280;
-    border: 2px dashed transparent;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    background: transparent;
-    margin-bottom: 0.5rem;
-}
+        .buy-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
 
-.editable-category:focus {
-    outline: none;
-    border-color: #111827;
-    background: #f9fafb;
-}
+        .buy-btn {
+            width: 100%;
+        }
 
-/* Кнопки управления спецификацией */
-.spec-controls {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-.btn-add-spec {
-    background-color: #111827;
-    color: white;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
 
-.btn-add-spec:hover {
-    background-color: #1f2937;
-}
+        /* ====== Specs (как в edit) ====== */
+        .spec-scroll {
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+        }
 
-.editable-spec-label,
-.editable-spec-value,
-.editable-spec-unit {
-    border: 1px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    background: transparent;
-    width: 100%;
-    font-family: inherit;
-}
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
 
-.editable-spec-label {
-    font-weight: 500;
-    color: #6b7280;
-}
+        .spec-table td {
+            padding: .75rem .9rem;
+            border-bottom: 1px solid #eef2f7;
+            vertical-align: top;
+        }
 
-.editable-spec-value,
-.editable-spec-unit {
-    color: #111827;
-    font-weight: 500;
-}
+        .spec-table tr:last-child td {
+            border-bottom: none;
+        }
 
-.editable-spec-label:focus,
-.editable-spec-value:focus,
-.editable-spec-unit:focus {
-    outline: none;
-    border-color: #111827;
-    background: #f9fafb;
-}
+        .spec-label {
+            color: #6b7280;
+            width: 45%;
+        }
 
-.btn-remove-spec {
-    color: #dc2626;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    font-size: 1.25rem;
-    line-height: 1;
-    transition: all 0.2s ease;
-}
+        .spec-value {
+            font-weight: 600;
+            color: #111827;
+        }
 
-.btn-remove-spec:hover {
-    color: #991b1b;
-    transform: scale(1.1);
-}
+        .spec-input {
+            width: 100%;
+            border: 1px dashed transparent;
+            border-radius: 6px;
+            padding: .4rem .5rem;
+            transition: all .15s ease;
+            background: transparent;
+        }
 
-/* Кнопка сохранения */
-.admin-save-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: #16a34a;
-    color: white;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(22, 163, 74, 0.3);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 1000;
-}
+        .spec-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
 
-.admin-save-button:hover {
-    background-color: #15803d;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(22, 163, 74, 0.4);
-}
+        .spec-row-actions {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
 
-.admin-save-button:active {
-    transform: translateY(0);
-}
+        .icon-btn {
+            border: none;
+            background: transparent;
+            padding: .35rem .5rem;
+            border-radius: 8px;
+            transition: all .15s ease;
+        }
 
-@media (max-width: 991px) {
-    .carousel-thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 0.5rem;
-    }
-}
+        .icon-btn:hover {
+            background: #f3f4f6;
+        }
 
-@media (max-width: 575px) {
-    .carousel-image-container {
-        padding: 1rem;
-    }
-    
-    .carousel-thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    }
-    
-    .editable-title {
-        font-size: 1.5rem;
-    }
-    
-    .admin-save-button {
-        bottom: 1rem;
-        right: 1rem;
-        left: 1rem;
-        width: calc(100% - 2rem);
-    }
-}
-</style>
+        .icon-btn.danger {
+            color: #dc2626;
+        }
 
-<div class="container product-page py-4 py-md-5">
-    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        
-        <div class="row g-4 g-lg-5">
-            
-            <!-- Левая колонка - Изображения -->
-            <div class="col-lg-6">
-                <div class="product-carousel-wrapper">
-                    <!-- Главное фото -->
-                    <div class="product-single-image">
-                        <div class="carousel-image-container">
-                            <div class="image-upload-placeholder" onclick="document.getElementById('mainImageInput').click()">
-                                <svg fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
-                                </svg>
-                                <div class="upload-text">Kliknij, aby dodać główne zdjęcie</div>
-                            </div>
-                            <img id="mainImagePreview" class="image-preview">
-                        </div>
-                        <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*" required onchange="previewMainImage(this)">
-                    </div>
+        .icon-btn.danger:hover {
+            background: #fee2e2;
+        }
 
-                    <!-- Миниатюры для дополнительных фото -->
-                    <div class="carousel-thumbnails">
-                        <div class="thumbnail-item">
-                            <div class="thumbnail-upload-placeholder" onclick="document.getElementById('galleryImagesInput').click()">
-                                <svg fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                </svg>
+        /* ====== Preview новых файлов (как в edit) ====== */
+        .newfiles-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-top: .75rem;
+        }
+
+        .newfile-chip {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            padding: .35rem .6rem;
+            background: #fff;
+        }
+
+        .newfile-chip img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .chip-remove {
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 800;
+            padding: .1rem .35rem;
+            border-radius: 8px;
+        }
+
+        .chip-remove:hover {
+            background: #fee2e2;
+        }
+
+        /* ====== Fixed buttons (как в edit) ====== */
+        @media (max-width: 991px) {
+            .carousel-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: .5rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .carousel-image-container {
+                padding: 1rem;
+            }
+
+            .carousel-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            }
+
+            .modal-close {
+                top: 1rem;
+                right: 1rem;
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+
+    <div class="container product-page py-4 py-md-5">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="createForm">
+            @csrf
+
+            <div class="row g-4 g-lg-5 align-items-stretch" id="topRow">
+
+                {{-- LEFT: media (как в edit) --}}
+                <div class="col-lg-6" id="leftCol">
+
+                    <div class="product-carousel-wrapper">
+                        <!-- Главное фото -->
+                        <div class="product-single-image">
+                            <div class="carousel-image-container" id="mainImageContainer" data-image="">
+                                <div class="image-upload-placeholder" id="mainPlaceholder">
+                                    <svg fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                        <path
+                                            d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+                                    </svg>
+                                    <div class="upload-text">Tutaj się pojawi główne zdjęcie</div>
+                                </div>
+
+                                <img id="mainImagePreview" class="image-preview">
                             </div>
                         </div>
-                        <div id="galleryPreviewContainer"></div>
+
                     </div>
-                    <input type="file" name="images[]" id="galleryImagesInput" class="d-none" accept="image/*" multiple onchange="previewGalleryImages(this)">
-                    <div class="form-text mt-2" style="color: #6b7280; font-size: 0.875rem;">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                        </svg>
-                        Kliknij na "+" aby dodać galerię zdjęć (opcjonalnie)
+
+                    {{-- Controls under media (те же кнопки что в edit) --}}
+                    <div class="mt-3 d-grid gap-2">
+                        <div class="buy-card">
+                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                <div class="fw-semibold">Zdjęcia</div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-outline-dark btn-sm" id="changeMainBtn">
+                                        Dodaj główne zdjęcie
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-dark btn-sm" id="addGalleryBtn">
+                                        Dodaj zdjęcia do galerii
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*"
+                                required>
+                            <input type="file" name="images[]" id="galleryImagesInput" class="d-none" accept="image/*"
+                                multiple>
+
+                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                                Główne zdjęcie jest wymagane. Galeria jest opcjonalna.
+                            </div>
+
+                            <div id="newFilesPreview" class="newfiles-list" style="display:none;"></div>
+                        </div>
                     </div>
+
                 </div>
-            </div>
-            
-            <!-- Правая колонка - Информация -->
-            <div class="col-lg-6">
-                <div class="product-info">
-                    
-                    <!-- Kategoria -->
-                    <select name="category_id" class="editable-category" required>
-                        <option value="" disabled selected>-- Wybierz kategorię --</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
-                    
-                    <!-- Название товара -->
-                    <input type="text" name="name" class="editable-title" placeholder="Nazwa produktu..." required>
-                    
-                    <!-- Цена -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <input type="number" step="0.01" name="price" class="editable-price" placeholder="0.00" required>
-                        <span style="font-size: 1.5rem; font-weight: 700; color: #111827; margin-left: 0.25rem;">zł</span>
-                    </div>
-                    
-                    <!-- Кнопка добавления в корзину (неактивная) -->
-                    <button type="button" class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%; max-width: 400px;">
-                        <div class="fw-bold text-uppercase">
-                            <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
+
+                {{-- RIGHT: fields + specs (как в edit) --}}
+                <div class="col-lg-6 d-flex" id="rightCol">
+                    <div class="d-flex flex-column w-100" id="rightBox">
+
+                        {{-- Buy-like block --}}
+                        <div class="buy-card mb-3" id="buyBlock">
+                            <div class="mb-2">
+                                <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
+                                <select name="category_id" class="edit-category editable-like" required>
+                                     <option value="" disabled {{ empty($selectedCategoryId) ? 'selected' : '' }}>-- Wybierz kategorię --</option>
+                                    @foreach ($categories as $cat)
+                                       <option value="{{ $cat->id }}" {{ (string)$selectedCategoryId === (string)$cat->id ? 'selected' : '' }}>
+                                         {{ $cat->name }}
+                                         </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="text-muted" style="font-size:.9rem;">Nazwa produktu</label>
+                                <input type="text" name="name" class="product-title-input editable-like"
+                                    placeholder="Nazwa produktu..." required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="text-muted" style="font-size:.9rem;">Cena</label><br>
+                                <div class="price-wrap">
+                                    <input type="text" inputmode="decimal" name="price"
+                                        class="product-price-input editable-like" placeholder="0.00" required>
+                                    <span class="price-suffix">zł</span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-dark btn-lg w-100" disabled
+                                style="opacity:.55; cursor:not-allowed;">
+                                <div class="fw-bold text-uppercase">
+                                    <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
+                                </div>
+                            </button>
+
+                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                                (Podgląd — przycisk nieaktywny na stronie tworzenia)
+                            </div>
                         </div>
-                    </button>
-                    
-                    <!-- Описание товара -->
-                    <div class="product-description">
-                        <h2 class="section-title">Opis produktu</h2>
-                        <textarea name="description" class="editable-description" placeholder="Opisz szczegółowo produkt..."></textarea>
-                    </div>
-                    
-                    <!-- Спецификация -->
-                    <div class="specifications">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2 class="section-title mb-0">Specyfikacja techniczna</h2>
-                            <button type="button" class="btn-add-spec" onclick="addSpecRow()">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
-                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                </svg>
+
+                        {{-- Specyfikacja (как в edit) --}}
+                        <div class="d-flex align-items-center justify-content-between mb-2" id="specHeader">
+                            <h2 class="h5 mb-0">Specyfikacja techniczna</h2>
+                            <button type="button" class="btn btn-outline-dark btn-sm" id="addSpecBtn">
                                 Dodaj cechę
                             </button>
                         </div>
-                        
-                        <table class="spec-table" id="specsTable">
-                            <tbody id="specsContainer">
-                                <!-- Спецификации будут добавляться сюда -->
-                            </tbody>
-                        </table>
-                        
-                        <div class="form-text mt-3" style="color: #6b7280; font-size: 0.875rem;">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                            </svg>
-                            Jeśli wpiszesz nową nazwę cechy, system sam ją utworzy
+
+                        <div class="spec-scroll flex-grow-1" id="specsScroll">
+                            <table class="spec-table" id="specsTable">
+                                <tbody id="specsContainer"></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- BOTTOM: Opis produktu (как в edit) --}}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h2 class="h5 mb-0">Opis produktu (HTML)</h2>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="togglePreviewBtn">
+                            Podgląd
+                        </button>
+                    </div>
+
+                    <div class="spec-scroll">
+                        <div class="p-3 p-md-4">
+                            <textarea name="description" id="descriptionInput" class="form-control editable-like"
+                                style="min-height: 280px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"
+                                placeholder="Wklej tutaj HTML opis (nagłówki, listy, obrazki itd.)..."></textarea>
+
+                            <div id="descriptionPreviewWrap" style="display:none; margin-top: 1rem;">
+                                <div class="text-muted mb-2" style="font-size:.9rem;">Podgląd:</div>
+                                <div id="descriptionPreview" class="p-3 border rounded" style="background:#fff;"></div>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
-            
-        </div>
-        
-        <!-- Кнопка сохранения -->
-        <button type="submit" class="admin-save-button">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
-                <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-            </svg>
-            Zapisz produkt
-        </button>
-    </form>
-</div>
 
-<script>
-// 1. Превью главного фото
-function previewMainImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById('mainImagePreview');
-            const placeholder = document.querySelector('.image-upload-placeholder');
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            placeholder.style.display = 'none';
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-// 2. Превью галереи
-function previewGalleryImages(input) {
-    const container = document.getElementById('galleryPreviewContainer');
-    container.innerHTML = '';
-    
-    if (input.files) {
-        Array.from(input.files).forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const thumbHtml = `
-                    <div class="thumbnail-item">
-                        <img src="${e.target.result}" alt="Gallery ${index + 1}">
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', thumbHtml);
-            }
-            reader.readAsDataURL(file);
-        });
-    }
-}
-
-// 3. Логика добавления характеристик
-let specIndex = 0;
-
-function addSpecRow() {
-    const container = document.getElementById('specsContainer');
-    
-    const row = document.createElement('tr');
-    row.className = 'spec-row';
-    row.id = `spec-${specIndex}`;
-    row.innerHTML = `
-        <td class="spec-label" style="position: relative;">
-            <input type="text" name="specs[${specIndex}][name]" class="editable-spec-label" placeholder="Nazwa cechy">
-        </td>
-        <td class="spec-value" style="position: relative;">
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <input type="text" name="specs[${specIndex}][value]" class="editable-spec-value" placeholder="Wartość" style="flex: 1;">
-                <input type="text" name="specs[${specIndex}][unit]" class="editable-spec-unit" placeholder="jedn." style="width: 80px;">
-                <button type="button" class="btn-remove-spec" onclick="removeSpec(${specIndex})" title="Usuń">×</button>
+            {{-- Bottom fixed admin actions (как в edit) --}}
+            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
+                <a href="{{ route('home') }}" class="btn btn-secondary shadow-sm">
+                    Anuluj
+                </a>
+                <button type="submit" class="btn btn-success shadow-sm d-flex align-items-center gap-2">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                    </svg>
+                    Zapisz produkt
+                </button>
             </div>
-        </td>
-    `;
-    
-    container.appendChild(row);
-    specIndex++;
-}
 
-function removeSpec(id) {
-    const row = document.getElementById('spec-' + id);
-    if (row) {
-        row.remove();
-    }
-}
+        </form>
+    </div>
 
-// Добавим одну пустую строку при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    addSpecRow();
-});
-</script>
+    {{-- Модалка (для preview главного фото) --}}
+    <div id="imageModal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ====== MODAL (как в edit) ======
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.modal-close');
+
+            function openImageModal(src) {
+                if (!src) return;
+                modal.style.display = 'flex';
+                modalImg.src = src;
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+                modalImg.src = '';
+                document.body.style.overflow = 'auto';
+            }
+            closeBtn?.addEventListener('click', closeModal);
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+            });
+
+            // ====== MAIN IMAGE ======
+            const mainPlaceholder = document.getElementById('mainPlaceholder');
+            const mainInput = document.getElementById('mainImageInput');
+            const changeMainBtn = document.getElementById('changeMainBtn');
+
+            const mainPreview = document.getElementById('mainImagePreview');
+            const mainContainer = document.getElementById('mainImageContainer');
+
+            function setMainPreview(file) {
+                if (!file || !file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    mainPreview.src = e.target.result;
+                    mainPreview.style.display = 'block';
+                    mainPlaceholder.style.display = 'none';
+                    mainContainer.setAttribute('data-image', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            mainPlaceholder?.addEventListener('click', () => mainInput.click());
+            changeMainBtn?.addEventListener('click', () => mainInput.click());
+            mainInput?.addEventListener('change', function() {
+                if (this.files && this.files[0]) setMainPreview(this.files[0]);
+            });
+
+            // click on image to zoom
+            mainContainer.style.cursor = 'zoom-in';
+            mainContainer.addEventListener('click', function() {
+                const src = this.getAttribute('data-image');
+                if (src) openImageModal(src);
+            });
+
+            // ====== GALLERY FILES (как в edit: кнопка + preview chips + remove) ======
+            const addGalleryBtn = document.getElementById('addGalleryBtn');
+            const galleryInput = document.getElementById('galleryImagesInput');
+            const newFilesPreview = document.getElementById('newFilesPreview');
+
+            let galleryFiles = []; // держим собственный список, чтобы можно было удалять отдельные
+
+            function syncGalleryInputFiles() {
+                // пересобираем FileList через DataTransfer
+                const dt = new DataTransfer();
+                galleryFiles.forEach(f => dt.items.add(f));
+                galleryInput.files = dt.files;
+            }
+
+            function renderGalleryChips() {
+                newFilesPreview.innerHTML = '';
+
+                if (!galleryFiles.length) {
+                    newFilesPreview.style.display = 'none';
+                    return;
+                }
+                newFilesPreview.style.display = 'flex';
+
+                galleryFiles.forEach((file, idx) => {
+                    const chip = document.createElement('div');
+                    chip.className = 'newfile-chip';
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.alt = 'new';
+
+                    const name = document.createElement('div');
+                    name.className = 'text-muted';
+                    name.style.fontSize = '.85rem';
+                    name.textContent = file.name.length > 18 ? (file.name.slice(0, 18) + '…') : file.name;
+
+                    const remove = document.createElement('button');
+                    remove.type = 'button';
+                    remove.className = 'chip-remove';
+                    remove.title = 'Usuń';
+                    remove.textContent = '×';
+                    remove.addEventListener('click', () => {
+                        galleryFiles.splice(idx, 1);
+                        syncGalleryInputFiles();
+                        renderGalleryChips();
+                    });
+
+                    chip.appendChild(img);
+                    chip.appendChild(name);
+                    chip.appendChild(remove);
+                    newFilesPreview.appendChild(chip);
+                });
+            }
+
+            addGalleryBtn?.addEventListener('click', () => galleryInput.click());
+
+            galleryInput?.addEventListener('change', function() {
+                const files = Array.from(this.files || []).filter(f => f.type.startsWith('image/'));
+                if (!files.length) return;
+
+                // добавляем к уже выбранным (а не перетираем)
+                galleryFiles = galleryFiles.concat(files);
+
+                // простая защита от дублей по имени+размеру
+                const seen = new Set();
+                galleryFiles = galleryFiles.filter(f => {
+                    const key = f.name + ':' + f.size;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+
+                syncGalleryInputFiles();
+                renderGalleryChips();
+            });
+
+            // ====== SPECS (как в edit) ======
+            let specIndex = 0;
+            const addSpecBtn = document.getElementById('addSpecBtn');
+            const specsContainer = document.getElementById('specsContainer');
+
+            function addSpecRow() {
+                const tr = document.createElement('tr');
+                tr.className = 'spec-row';
+                tr.id = `spec-${specIndex}`;
+                tr.innerHTML = `
+            <td class="spec-label">
+                <input type="text" name="specs[${specIndex}][name]" class="spec-input" placeholder="Nazwa cechy">
+            </td>
+            <td class="spec-value">
+                <div class="spec-row-actions">
+                    <input type="text" name="specs[${specIndex}][value]" class="spec-input" placeholder="Wartość" style="flex:1;">
+                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input" placeholder="jedn." style="width:90px;">
+                    <button type="button" class="icon-btn danger" title="Usuń">×</button>
+                </div>
+            </td>
+        `;
+                tr.querySelector('.icon-btn.danger').addEventListener('click', () => tr.remove());
+                specsContainer.appendChild(tr);
+                specIndex++;
+            }
+
+            addSpecBtn?.addEventListener('click', addSpecRow);
+            addSpecRow(); // одна строка по умолчанию
+
+            // ====== DESCRIPTION preview toggle (как в edit) ======
+            const togglePreviewBtn = document.getElementById('togglePreviewBtn');
+            const descriptionInput = document.getElementById('descriptionInput');
+            const previewWrap = document.getElementById('descriptionPreviewWrap');
+            const preview = document.getElementById('descriptionPreview');
+
+            function renderPreview() {
+                preview.innerHTML = descriptionInput.value;
+            }
+
+            let previewOn = false;
+            togglePreviewBtn?.addEventListener('click', function() {
+                previewOn = !previewOn;
+                togglePreviewBtn.textContent = previewOn ? 'Edytuj' : 'Podgląd';
+                previewWrap.style.display = previewOn ? 'block' : 'none';
+                descriptionInput.style.display = previewOn ? 'none' : 'block';
+                if (previewOn) renderPreview();
+            });
+
+            descriptionInput?.addEventListener('input', function() {
+                if (previewOn) renderPreview();
+            });
+
+        });
+    </script>
 
 @endsection

@@ -39,40 +39,36 @@ class MainController extends Controller
         $this->applySorting($query, $request);
 
         // По умолчанию 8 товаров
-        $perPage = 8;
-
-        if (auth()->user()?->is_admin) {
-            $perPage = 7;
-        }
+       $perPage = auth()->user()?->is_admin ? 7 : 8;
 
         $products = $query->paginate($perPage)->withQueryString();
         return view('home', compact('products'));
     }
 
     // ПОИСК (Исправленный)
-    public function search(Request $request)
-    {
-        $searchWord = $request->input('query');
+   public function search(Request $request)
+{
+    $searchWord = $request->input('query');
 
-        // 1. Формируем запрос поиска
-        $query = Product::where(function ($q) use ($searchWord) {
-            $q->where('name', 'LIKE', "%{$searchWord}%")
-                ->orWhere('description', 'LIKE', "%{$searchWord}%");
-        });
+    $perPage = auth()->user()?->is_admin ? 7 : 8;
 
-        // 2. Применяем сортировку
-        $this->applySorting($query, $request);
+    $query = Product::where(function ($q) use ($searchWord) {
+        $q->where('name', 'LIKE', "%{$searchWord}%")
+          ->orWhereHas('category', function ($cat) use ($searchWord) {
+              $cat->where('name', 'LIKE', "%{$searchWord}%");
+          });
+    });
 
-        // 3. Пагинация
-        $products = $query->paginate(8)->withQueryString();
+    $this->applySorting($query, $request);
 
-        // 4. ВОЗВРАТ (ИСПРАВЛЕНО):
-        // Передаем данные массивом, так как имена переменных разные ($searchWord -> $query)
-        return view('search', [
-            'products' => $products,
-            'query' => $searchWord
-        ]);
-    }
+    $products = $query->paginate($perPage)->withQueryString();
+
+    return view('search', [
+        'products' => $products,
+        'query' => $searchWord
+    ]);
+}
+
 
     public function product($slug)
     {
@@ -91,15 +87,11 @@ class MainController extends Controller
         return view('about');
     }
 
-    public function opinie()
-    {
-        return view('opinie');
-    }
-
 
     // КАТЕГОРИЯ
     public function category($slug, Request $request)
-    {
+    {   
+        $perPage = auth()->user()?->is_admin ? 7 : 8;
         $category = Category::where('slug', $slug)->firstOrFail();
 
         // 1. Берем запрос товаров этой категории (важно: скобки (), чтобы получить Builder)
@@ -109,7 +101,7 @@ class MainController extends Controller
         $this->applySorting($query, $request);
 
         // 3. Пагинация
-        $products = $query->paginate(8)->withQueryString();
+        $products = $query->paginate($perPage)->withQueryString();
 
         return view('category', compact('category', 'products'));
     }

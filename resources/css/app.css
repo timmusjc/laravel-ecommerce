@@ -2,6 +2,8 @@
 @import 'tailwindcss';
 
 
+
+
 /* ===================================
    ОБЩИЕ СТИЛИ
    =================================== */
@@ -2964,3 +2966,42 @@ select.select-inline {
     display: flex;
     gap: 0.5rem;
 }
+
+
+/* ===== FLASH (success/error) ===== */
+.flash-msg{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:1rem;
+
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:1rem 1.25rem;
+    margin-bottom: .75rem;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.flash-text{
+    color:#111827;
+    font-size: .95rem;
+    line-height: 1.5;
+}
+
+.flash-success{ border-left: 6px solid #16a34a; }
+.flash-error{ border-left: 6px solid #dc2626; }
+
+.flash-close{
+    border:none;
+    background:transparent;
+    color:#6b7280;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 .25rem;
+    cursor:pointer;
+    transition: .15s ease;
+}
+.flash-close:hover{ color:#111827; transform: scale(1.05); }
+

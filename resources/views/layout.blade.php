@@ -16,7 +16,7 @@
                 TEppLE
             </a>
             <div class="header-actions">
-    <!-- кнопка поиска -->
+    {{-- <!-- кнопка поиска -->
     <button class="icon-btn search-toggle">
         🔍
     </button>
@@ -24,7 +24,7 @@
     <form action="/search">
         <input type="text" name="q" class="search-input" placeholder="Szukaj…">
         <button class="search-btn">🔍</button>
-    </form>
+    </form> --}}
 </div>
             <!-- Wyszukiwanie -->
             <form action="{{ route('search') }}" method="GET" class="search-form">
@@ -83,9 +83,6 @@
                     </li>
                     <li>
                         <a href="{{ route('about') }}" class="nav-link">O nas</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('opinie') }}" class="nav-link">Opinie</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -154,7 +151,7 @@
                                             <path fill-rule="evenodd"
                                                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                                         </svg>
-                                        Mój Profil
+                                        Mój profil
                                     </a>
                                 </li>
                                 @if (Auth::user()->is_admin)
@@ -207,6 +204,7 @@
         </div>
     </header>
 
+   
     <!-- Основной контент -->
     <main class="">
         @yield('main_content')
@@ -216,17 +214,30 @@
     <footer class="site-footer">
         <div class="footer-container">
             <ul class="footer-nav">
+                <li><a href="{{route('home')}}" class="footer-link">Home</a></li>
                 <li><a href="{{ route('cart') }}" class="footer-link">Koszyk</a></li>
                 <li><a href="{{ route('home') }}" class="footer-link">Produkty</a></li>
                 <li><a href="{{ route('categories') }}" class="footer-link">Kategorie</a></li>
                 <li><a href="{{ route('about') }}" class="footer-link">O nas</a></li>
-                <li><a href="{{ route('opinie') }}" class="footer-link">Opinie</a></li>
             </ul>
             <p class="footer-copyright">© 2026 Tymofii Korzh</p>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.flash-msg').forEach(msg => {
+    const close = msg.querySelector('.flash-close');
+    close?.addEventListener('click', () => msg.remove());
+
+    // auto-hide
+    setTimeout(() => {
+      if (document.body.contains(msg)) msg.remove();
+    }, 5000);
+  });
+});
+
         document.addEventListener('DOMContentLoaded', function() {
             const menuBtn = document.querySelector('.mobile-menu-btn');
             const navMenu = document.querySelector('.main-nav');
@@ -247,6 +258,79 @@ searchBtn.addEventListener('click', () => {
     searchOverlay.classList.toggle('active');
 });
     </script>
+    
+
+
+     {{-- FLASH MESSAGES --}}
+@if (session('success') || session('error') || $errors->any())
+    <div class="container" style="max-width:1400px; margin-top: 1rem;">
+        {{-- success --}}
+        @if (session('success'))
+            <div class="flash-msg flash-success" role="alert">
+                <div class="flash-text">{{ session('success') }}</div>
+                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
+            </div>
+        @endif
+
+        {{-- error --}}
+        @if (session('error'))
+            <div class="flash-msg flash-error" role="alert">
+                <div class="flash-text">{{ session('error') }}</div>
+                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
+            </div>
+        @endif
+
+        {{-- validation errors --}}
+        @if ($errors->any())
+            <div class="flash-msg flash-error" role="alert">
+                <div class="flash-text">
+                    <div class="fw-semibold mb-1">Sprawdź formularz:</div>
+                    <ul class="mb-0 ps-3">
+                        @foreach ($errors->all() as $msg)
+                            <li>{{ $msg }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
+            </div>
+        @endif
+    </div>
+@endif
+
+<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 14px;">
+      <div class="modal-header">
+        <h5 class="modal-title">Produkt dodany do koszyka</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+      </div>
+
+      <div class="modal-body">
+        Chcesz przejść do koszyka czy kontynuować zakupy?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
+          Kontynuuj zakupy
+        </button>
+        <a href="{{ route('cart') }}" class="btn btn-dark">
+          Przejdź do koszyka
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@if(session('product_added'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+        myModal.show();
+    });
+</script>
+@endif
+
 </body>
 
 </html>

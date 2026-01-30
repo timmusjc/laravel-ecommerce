@@ -4,682 +4,1078 @@
 
 @section('main_content')
 
-<style>
-/* ===================================
-   КАРУСЕЛЬ НА СТРАНИЦЕ ТОВАРА
-   =================================== */
+    <style>
+        /* ====== Твой стиль карусели/миниатюр (оставляем) ====== */
+        .product-carousel-wrapper {
+            width: 100%;
+        }
 
-.product-carousel-wrapper {
-    width: 100%;
-}
+        .carousel {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
 
-/* Контейнер карусели */
-.carousel {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* Квадратное соотношение 1:1 */
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
+        .carousel-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
 
-.carousel-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+        .carousel-item {
+            height: 100%;
+        }
 
-.carousel-item {
-    height: 100%;
-}
+        .carousel-image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
 
-.carousel-image-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
-}
+        .carousel-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
 
-.carousel-image-container img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
+        .product-single-image {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-/* Одиночное фото (без карусели) */
-.product-single-image {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-}
+        .product-single-image .carousel-image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
 
-.product-single-image .carousel-image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(17, 24, 39, 0.7);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
 
-/* Стрелки карусели */
-.carousel-control-prev,
-.carousel-control-next {
-    width: 40px;
-    height: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(17, 24, 39, 0.7);
-    border-radius: 50%;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
+        .carousel:hover .carousel-control-prev,
+        .carousel:hover .carousel-control-next {
+            opacity: 1;
+        }
 
-.carousel:hover .carousel-control-prev,
-.carousel:hover .carousel-control-next {
-    opacity: 1;
-}
+        .carousel-control-prev {
+            left: 1rem;
+        }
 
-.carousel-control-prev {
-    left: 1rem;
-}
+        .carousel-control-next {
+            right: 1rem;
+        }
 
-.carousel-control-next {
-    right: 1rem;
-}
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background: rgba(17, 24, 39, 0.9);
+        }
 
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
-    background: rgba(17, 24, 39, 0.9);
-}
+        .carousel-arrow {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
 
-.carousel-arrow {
-    width: 20px;
-    height: 20px;
-    color: white;
-}
+        .carousel-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: .75rem;
+        }
 
-/* Миниатюры */
-.carousel-thumbnails {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 0.75rem;
-}
+        .thumbnail-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
 
-.thumbnail-item {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* Квадрат */
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 6px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+        .thumbnail-item:hover {
+            border-color: #9ca3af;
+        }
 
-.thumbnail-item:hover {
-    border-color: #9ca3af;
-}
+        .thumbnail-item.active {
+            border-color: #111827;
+            box-shadow: 0 0 0 1px #111827;
+        }
 
-.thumbnail-item.active {
-    border-color: #111827;
-    box-shadow: 0 0 0 1px #111827;
-}
+        .thumbnail-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: .5rem;
+        }
 
-.thumbnail-item img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 0.5rem;
-}
+        /* ====== Модалка (оставляем твою) ====== */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn .3s ease;
+        }
 
-/* ОВЕРЛЕЙ ДЛЯ РЕДАКТИРОВАНИЯ ФОТО */
-.edit-image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-    z-index: 10;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-.carousel-image-container:hover .edit-image-overlay {
-    opacity: 1;
-}
-
-.edit-image-overlay svg {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 0.5rem;
-}
-
-.edit-image-overlay .overlay-text {
-    font-weight: 600;
-    font-size: 0.875rem;
-}
-
-/* РЕДАКТИРУЕМЫЕ ПОЛЯ В СТИЛЕ СТРАНИЦЫ ТОВАРА */
-.editable-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-    border: 2px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: 100%;
-}
-
-.editable-title:focus {
-    outline: none;
-    border-color: #f59e0b;
-    background: #fffbeb;
-}
-
-.editable-price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-    border: 2px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: auto;
-    display: inline-block;
-    min-width: 150px;
-}
-
-.editable-price:focus {
-    outline: none;
-    border-color: #f59e0b;
-    background: #fffbeb;
-}
-
-.editable-description {
-    color: #4b5563;
-    line-height: 1.6;
-    margin: 0;
-    border: 2px dashed transparent;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    width: 100%;
-    min-height: 120px;
-    font-family: inherit;
-    resize: vertical;
-}
-
-.editable-description:focus {
-    outline: none;
-    border-color: #f59e0b;
-    background: white;
-}
-
-.editable-category {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #6b7280;
-    border: 2px dashed transparent;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    background: transparent;
-    margin-bottom: 0.5rem;
-}
-
-.editable-category:focus {
-    outline: none;
-    border-color: #f59e0b;
-    background: #fffbeb;
-}
-
-/* Кнопки управления спецификацией */
-.spec-controls {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.btn-add-spec {
-    background-color: #111827;
-    color: white;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-add-spec:hover {
-    background-color: #1f2937;
-}
-
-.editable-spec-label,
-.editable-spec-value,
-.editable-spec-unit {
-    border: 1px dashed transparent;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    background: transparent;
-    width: 100%;
-    font-family: inherit;
-}
-
-.editable-spec-label {
-    font-weight: 500;
-    color: #6b7280;
-}
-
-.editable-spec-value,
-.editable-spec-unit {
-    color: #111827;
-    font-weight: 500;
-}
-
-.editable-spec-label:focus,
-.editable-spec-value:focus,
-.editable-spec-unit:focus {
-    outline: none;
-    border-color: #f59e0b;
-    background: #fffbeb;
-}
-
-.btn-remove-spec {
-    color: #dc2626;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    font-size: 1.25rem;
-    line-height: 1;
-    transition: all 0.2s ease;
-}
-
-.btn-remove-spec:hover {
-    color: #991b1b;
-    transform: scale(1.1);
-}
-
-/* Кнопка сохранения */
-.admin-save-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: #f59e0b;
-    color: white;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 1000;
-}
-
-.admin-save-button:hover {
-    background-color: #d97706;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
-}
-
-.admin-save-button:active {
-    transform: translateY(0);
-}
-
-.admin-cancel-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 14rem;
-    background-color: #6b7280;
-    color: white;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 1000;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.admin-cancel-button:hover {
-    background-color: #4b5563;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(107, 114, 128, 0.4);
-}
-
-@media (max-width: 991px) {
-    .carousel-thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 0.5rem;
-    }
-}
-
-@media (max-width: 575px) {
-    .carousel-image-container {
-        padding: 1rem;
-    }
-    
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .carousel-arrow {
-        width: 16px;
-        height: 16px;
-    }
-    
-    .carousel-control-prev {
-        left: 0.5rem;
-    }
-    
-    .carousel-control-next {
-        right: 0.5rem;
-    }
-    
-    .carousel-thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    }
-    
-    .editable-title {
-        font-size: 1.5rem;
-    }
-    
-    .admin-save-button,
-    .admin-cancel-button {
-        position: static;
-        width: 100%;
-        margin-top: 1rem;
-    }
-    
-    .admin-cancel-button {
-        margin-top: 0.5rem;
-    }
-}
-</style>
-
-<div class="container product-page py-4 py-md-5">
-    <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        
-        <div class="row g-4 g-lg-5">
-            
-            <!-- Левая колонка - Изображения -->
-            <div class="col-lg-6">
-                @if($product->images->count() > 0)
-                    <!-- Карусель с несколькими фото -->
-                    <div class="product-carousel-wrapper">
-                        <div id="productCarousel" class="carousel slide">
-                            <div class="carousel-inner">
-                                <!-- Главное фото -->
-                                <div class="carousel-item active">
-                                    <div class="carousel-image-container">
-                                        <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                                        
-                                        <div class="edit-image-overlay" onclick="document.getElementById('mainImageInput').click()">
-                                            <svg fill="currentColor" viewBox="0 0 16 16">
-                                                <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                                                <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                            </svg>
-                                            <span class="overlay-text">Zmień główne zdjęcie</span>
-                                        </div>
-                                        <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*" onchange="previewMainImage(this)">
-                                    </div>
-                                </div>
-                                <!-- Дополнительные фото -->
-                                @foreach($product->images as $galleryImg)
-                                <div class="carousel-item">
-                                    <div class="carousel-image-container">
-                                        <img src="{{ asset('storage/' . $galleryImg->path) }}" alt="{{ $product->name }}">
-                                        <div class="edit-image-overlay" style="cursor: default; opacity: 0.3;">
-                                            <span class="overlay-text" style="font-size: 0.75rem;">Tylko podgląd</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-
-                            <!-- Стрелки -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                                <svg class="carousel-arrow" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                                <svg class="carousel-arrow" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Миниатюры -->
-                        <div class="carousel-thumbnails">
-                            <div class="thumbnail-item active" 
-                                 data-bs-target="#productCarousel" 
-                                 data-bs-slide-to="0">
-                                <img id="thumbPreview" src="{{ asset('storage/' . $product->image) }}" alt="Miniatura">
-                            </div>
-                            
-                            @foreach($product->images as $key => $galleryImg)
-                            <div class="thumbnail-item" 
-                                 data-bs-target="#productCarousel" 
-                                 data-bs-slide-to="{{ $key + 1 }}">
-                                <img src="{{ asset('storage/' . $galleryImg->path) }}" alt="Miniatura">
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @else
-                    <!-- Одно фото без карусели -->
-                    <div class="product-single-image">
-                        <div class="carousel-image-container">
-                            <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                            
-                            <div class="edit-image-overlay" onclick="document.getElementById('mainImageInput').click()">
-                                <svg fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                                    <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                </svg>
-                                <span class="overlay-text">Zmień zdjęcie</span>
-                            </div>
-                            <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*" onchange="previewMainImage(this)">
-                        </div>
-                    </div>
-                @endif
-            </div>
-            
-            <!-- Правая колонка - Информация -->
-            <div class="col-lg-6">
-                <div class="product-info">
-                    
-                    <!-- Kategoria -->
-                    <select name="category_id" class="editable-category" required>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ $product->category_id == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    
-                    <!-- Название товара -->
-                    <input type="text" name="name" class="editable-title" value="{{ $product->name }}" required>
-                    
-                    <!-- Цена -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <input type="number" step="0.01" name="price" class="editable-price" value="{{ $product->price }}" required>
-                        <span style="font-size: 1.5rem; font-weight: 700; color: #111827; margin-left: 0.25rem;">zł</span>
-                    </div>
-                    
-                    <!-- Кнопка добавления в корзину (неактивная) -->
-                    <button type="button" class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%; max-width: 400px;">
-                        <div class="fw-bold text-uppercase">
-                            <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
-                        </div>
-                    </button>
-                    
-                    <!-- Описание товара -->
-                    <div class="product-description">
-                        <h2 class="section-title">Opis produktu</h2>
-                        <textarea name="description" class="editable-description">{{ $product->description }}</textarea>
-                    </div>
-                    
-                    <!-- Спецификация -->
-                    <div class="specifications">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2 class="section-title mb-0">Specyfikacja techniczna</h2>
-                            <button type="button" class="btn-add-spec" onclick="addSpecRow()">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
-                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                </svg>
-                                Dodaj cechę
-                            </button>
-                        </div>
-                        
-                        <table class="spec-table" id="specsTable">
-                            <tbody id="specsContainer">
-                                @foreach($product->attributes as $index => $attribute)
-                                <tr class="spec-row" id="spec-{{ $index }}">
-                                    <td class="spec-label" style="position: relative;">
-                                        <input type="text" name="specs[{{ $index }}][name]" class="editable-spec-label" value="{{ $attribute->name }}">
-                                    </td>
-                                    <td class="spec-value" style="position: relative;">
-                                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                            <input type="text" name="specs[{{ $index }}][value]" class="editable-spec-value" value="{{ $attribute->pivot->value }}" style="flex: 1;">
-                                            <input type="text" name="specs[{{ $index }}][unit]" class="editable-spec-unit" value="{{ $attribute->unit }}" style="width: 80px;" placeholder="jedn.">
-                                            <button type="button" class="btn-remove-spec" onclick="removeSpec({{ $index }})" title="Usuń">×</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                </div>
-            </div>
-            
-        </div>
-        
-        <!-- Кнопки управления -->
-        <a href="{{ route('product', $product->slug) }}" class="admin-cancel-button">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
-                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-            </svg>
-            Anuluj
-        </a>
-        <button type="submit" class="admin-save-button">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-            </svg>
-            Zapisz zmiany
-        </button>
-    </form>
-</div>
-
-<script>
-// 1. Превью главного фото
-function previewMainImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById('mainImagePreview');
-            preview.src = e.target.result;
-            
-            // Также обновляем миниатюру, если она есть
-            const thumb = document.getElementById('thumbPreview');
-            if (thumb) {
-                thumb.src = e.target.result;
+            to {
+                opacity: 1;
             }
         }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
 
-// 2. Синхронизация активной миниатюры с каруселью
-const myCarousel = document.getElementById('productCarousel');
-const thumbnails = document.querySelectorAll('.thumbnail-item');
-
-if (myCarousel) {
-    myCarousel.addEventListener('slide.bs.carousel', function (event) {
-        const index = event.to;
-        thumbnails.forEach(thumb => thumb.classList.remove('active'));
-        if(thumbnails[index]) {
-            thumbnails[index].classList.add('active');
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            animation: zoomIn .3s ease;
         }
-    });
-}
 
-// 3. Логика добавления характеристик
-let specIndex = {{ $product->attributes->count() }};
+        @keyframes zoomIn {
+            from {
+                transform: scale(.8);
+            }
 
-function addSpecRow() {
-    const container = document.getElementById('specsContainer');
-    
-    const row = document.createElement('tr');
-    row.className = 'spec-row';
-    row.id = `spec-${specIndex}`;
-    row.innerHTML = `
-        <td class="spec-label" style="position: relative;">
-            <input type="text" name="specs[${specIndex}][name]" class="editable-spec-label" placeholder="Nazwa cechy">
-        </td>
-        <td class="spec-value" style="position: relative;">
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <input type="text" name="specs[${specIndex}][value]" class="editable-spec-value" placeholder="Wartość" style="flex: 1;">
-                <input type="text" name="specs[${specIndex}][unit]" class="editable-spec-unit" placeholder="jedn." style="width: 80px;">
-                <button type="button" class="btn-remove-spec" onclick="removeSpec(${specIndex})" title="Usuń">×</button>
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 3rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: opacity .2s ease;
+            line-height: 1;
+            z-index: 10001;
+        }
+
+        .modal-close:hover {
+            opacity: .7;
+        }
+
+        /* ====== Новый стиль формы (минимально, под твой дизайн) ====== */
+        .product-title {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+            margin-bottom: .75rem;
+        }
+
+        .product-price {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+            margin-bottom: 1rem;
+        }
+
+        .buy-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .edit-field {
+            border: 2px dashed transparent;
+            border-radius: 8px;
+            transition: all .2s ease;
+        }
+
+        .edit-field:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .spec-scroll {
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        .spec-table td {
+            padding: .75rem .9rem;
+            border-bottom: 1px solid #eef2f7;
+            vertical-align: top;
+        }
+
+        .spec-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            color: #6b7280;
+            width: 45%;
+        }
+
+        .spec-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* input внутри таблицы — без ломания верстки */
+        .spec-input {
+            width: 100%;
+            border: 1px dashed transparent;
+            border-radius: 6px;
+            padding: .4rem .5rem;
+            transition: all .15s ease;
+            background: transparent;
+        }
+
+        .spec-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .spec-row-actions {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            padding: .35rem .5rem;
+            border-radius: 8px;
+            transition: all .15s ease;
+        }
+
+        .icon-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .icon-btn.danger {
+            color: #dc2626;
+        }
+
+        .icon-btn.danger:hover {
+            background: #fee2e2;
+        }
+
+        /* Галерея существующих фото — чекбокс удаления */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: .75rem;
+        }
+
+        .gallery-tile {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .gallery-tile .imgbox {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+        }
+
+        .gallery-tile img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: .5rem;
+        }
+
+        .gallery-tile .tile-footer {
+            padding: .5rem .65rem;
+            border-top: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .5rem;
+            font-size: .85rem;
+        }
+
+        /* Preview новых файлов */
+        .newfiles-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-top: .75rem;
+        }
+
+        .newfile-chip {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            padding: .35rem .6rem;
+            background: #fff;
+        }
+
+        .newfile-chip img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 991px) {
+            .carousel-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: .5rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .carousel-image-container {
+                padding: 1rem;
+            }
+
+            .carousel-control-prev,
+            .carousel-control-next {
+                width: 32px;
+                height: 32px;
+            }
+
+            .carousel-arrow {
+                width: 16px;
+                height: 16px;
+            }
+
+            .carousel-control-prev {
+                left: .5rem;
+            }
+
+            .carousel-control-next {
+                right: .5rem;
+            }
+
+            .carousel-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            }
+
+            .modal-close {
+                top: 1rem;
+                right: 1rem;
+                font-size: 2.5rem;
+            }
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* Стили полей в твоём стиле */
+        .editable-like {
+            border: 2px dashed transparent;
+            border-radius: 10px;
+            transition: all .2s ease;
+            background: transparent;
+        }
+
+        .editable-like:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        /* Название (инпут выглядит как заголовок товара) */
+        .edit-name {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+            padding: .35rem .6rem;
+            width: 100%;
+        }
+
+        /* Цена (крупно, но аккуратно) */
+        .price-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .edit-price {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+            padding: .35rem 2.2rem .35rem .6rem;
+            /* справа место под "zł" */
+            width: 220px;
+            /* не во всю ширину */
+        }
+
+        .price-suffix {
+            position: absolute;
+            right: .7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+            color: #111827;
+            pointer-events: none;
+        }
+
+        /* Категория НЕ на всю ширину */
+        .edit-category {
+            width: auto;
+            min-width: 220px;
+            padding: .45rem .6rem;
+            font-weight: 600;
+            color: #111827;
+            background: transparent;
+            border-radius: 10px;
+        }
+
+        /* Кнопка "Dodaj do koszyka" как на товаре */
+        .buy-btn {
+            width: 100%;
+        }
+
+        /* Кнопки под фото — аккуратно */
+        .media-actions {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Кнопка-иконка вместо текста Podgląd (чтобы не не влезало) */
+        .icon-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            transition: all .15s ease;
+        }
+
+        .icon-chip:hover {
+            background: #f3f4f6;
+        }
+
+        /* Галерея плиткой */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: .75rem;
+        }
+
+        .gallery-tile {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .gallery-tile .imgbox {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+        }
+
+        .gallery-tile img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: .5rem;
+        }
+
+        .gallery-tile .tile-footer {
+            padding: .5rem .65rem;
+            border-top: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .4rem;
+            font-size: .85rem;
+        }
+    </style>
+
+    <div class="container product-page py-4 py-md-5">
+        <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data"
+            id="editForm">
+            @csrf
+            @method('PUT')
+
+            {{-- TOP (как на странице товара) --}}
+            <div class="row g-4 g-lg-5 align-items-stretch" id="topRow">
+
+                {{-- LEFT: media --}}
+                <div class="col-lg-6" id="leftCol">
+                    @php
+                        $hasGallery = $product->images->count() > 0;
+                    @endphp
+
+                    @if ($hasGallery)
+                        <div class="product-carousel-wrapper">
+                            <div id="productCarousel" class="carousel slide">
+                                <div class="carousel-inner">
+
+                                    {{-- Main photo --}}
+                                    <div class="carousel-item active">
+                                        <div class="carousel-image-container"
+                                            data-image="{{ asset('storage/' . $product->image) }}">
+                                            <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}"
+                                                alt="{{ $product->name }}">
+                                        </div>
+                                    </div>
+
+                                    {{-- Existing gallery --}}
+                                    @foreach ($product->images as $galleryImg)
+                                        <div class="carousel-item">
+                                            <div class="carousel-image-container"
+                                                data-image="{{ asset('storage/' . $galleryImg->path) }}">
+                                                <img src="{{ asset('storage/' . $galleryImg->path) }}"
+                                                    alt="{{ $product->name }}">
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
+                                    data-bs-slide="prev">
+                                    <svg class="carousel-arrow" fill="currentColor" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                    </svg>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
+                                    data-bs-slide="next">
+                                    <svg class="carousel-arrow" fill="currentColor" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </button>
+                            </div>
+
+
+                        </div>
+                    @else
+                        <div class="product-single-image">
+                            <div class="carousel-image-container" data-image="{{ asset('storage/' . $product->image) }}">
+                                <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}"
+                                    alt="{{ $product->name }}">
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Controls under media (админские формы красиво) --}}
+                    <div class="mt-3 d-grid gap-2">
+                        
+                        <div class="buy-card">
+
+                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                <div class="fw-semibold">Zdjęcia</div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-outline-dark btn-sm" id="changeMainBtn">
+                                        Zmień główne zdjęcie
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-dark btn-sm" id="addGalleryBtn">
+                                        Dodaj zdjęcia do galerii
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*">
+                            <input type="file"
+       name="images[]"
+       id="galleryImagesInput"
+       class="d-none"
+       accept="image/*"
+       multiple>
+
+                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                                Główne zdjęcie wyświetla się jako pierwsze. Galeria to dodatkowe zdjęcia w karuzeli.
+                            </div>
+
+                            <div id="newFilesPreview" class="newfiles-list" style="display:none;"></div>
+                            
+                        </div>
+                        {{-- Existing gallery management --}}
+                        @if ($product->images->count() > 0)
+                            <div class="buy-card">
+                                <div class="fw-semibold mb-2">Aktualna galeria</div>
+
+                                <div class="gallery-grid">
+                                    @foreach ($product->images as $galleryImg)
+                                        <div class="gallery-tile">
+                                            <div class="imgbox">
+                                                <img src="{{ asset('storage/' . $galleryImg->path) }}" alt="gallery">
+                                            </div>
+                                            <div class="tile-footer">
+                                                <label class="d-flex align-items-center gap-2 m-0">
+                                                    <input type="checkbox" name="remove_gallery[]"
+                                                        value="{{ $galleryImg->id }}">
+                                                    Usuń
+                                                </label>
+
+                                                <button type="button" class="icon-chip" title="Podgląd"
+                                                    data-image="{{ asset('storage/' . $galleryImg->path) }}"
+                                                    onclick="openImageModal(this.getAttribute('data-image'))">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                        <path
+                                                            d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="text-muted mt-2" style="font-size:.9rem;">
+                                    Zaznacz zdjęcia do usunięcia i kliknij “Zapisz”.
+                                </div>
+                            </div>
+                        @endif
+
+                    </div>
+                </div>
+
+                {{-- RIGHT: fields + specs до границы фото --}}
+                <div class="col-lg-6 d-flex" id="rightCol">
+                    <div class="d-flex flex-column w-100" id="rightBox">
+
+                        {{-- Buy-like block (но с формами) --}}
+                        <div class="buy-card mb-3" id="buyBlock">
+                            {{-- Категория (не широкая) --}}
+                            <div class="mb-2">
+                                <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
+                                <select name="category_id" class="edit-category editable-like" required>
+                                    @foreach ($categories as $cat)
+                                        <option value="{{ $cat->id }}"
+                                            {{ $product->category_id == $cat->id ? 'selected' : '' }}>
+                                            {{ $cat->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Название --}}
+                            <div class="mb-2">
+                                <label class="text-muted" style="font-size:.9rem;">Nazwa produktu</label>
+                                <input type="text" name="name" class="edit-name editable-like"
+                                    value="{{ $product->name }}" required>
+                            </div>
+
+                            {{-- Цена (без стрелочек, zł визуально внутри) --}}
+                            <div class="mb-3">
+                                <label class="text-muted" style="font-size:.9rem;">Cena</label><br>
+                                <div class="price-wrap">
+                                    <input type="text" inputmode="decimal" name="price"
+                                        class="edit-price editable-like"
+                                        value="{{ number_format($product->price, 2, '.', '') }}" autocomplete="off"
+                                        required>
+                                    <span class="price-suffix">zł</span>
+                                </div>
+                            </div>
+
+                            {{-- Кнопка как на товаре --}}
+                            <button type="button"
+                                class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden buy-btn"
+                                disabled style="opacity:.6; cursor:not-allowed;">
+                                <div class="fw-bold text-uppercase">
+                                    <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
+                                </div>
+                            </button>
+
+                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                                (Podgląd — przycisk nieaktywny na stronie edycji)
+                            </div>
+                        </div>
+
+                        {{-- Specyfikacja: scroll max do granicy FOTO, не до миниатюр --}}
+                        <div class="d-flex align-items-center justify-content-between mb-2" id="specHeader">
+                            <h2 class="h5 mb-0">Specyfikacja techniczna</h2>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-dark btn-sm" id="addSpecBtn">
+                                    Dodaj cechę
+                                </button>
+
+                                @if ($product->attributes->count() > 10)
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="toggleSpecsBtn">
+                                        Rozwiń
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="spec-scroll flex-grow-1" id="specsScroll">
+                            <table class="spec-table" id="specsTable">
+                                <tbody id="specsContainer">
+                                    @foreach ($product->attributes as $index => $attribute)
+                                        <tr class="spec-row" id="spec-{{ $index }}">
+                                            <td class="spec-label">
+                                                <input type="text" name="specs[{{ $index }}][name]"
+                                                    class="spec-input" value="{{ $attribute->name }}"
+                                                    placeholder="Nazwa cechy">
+                                            </td>
+                                            <td class="spec-value">
+                                                <div class="spec-row-actions">
+                                                    <input type="text" name="specs[{{ $index }}][value]"
+                                                        class="spec-input" value="{{ $attribute->pivot->value }}"
+                                                        placeholder="Wartość" style="flex:1;">
+                                                    <input type="text" name="specs[{{ $index }}][unit]"
+                                                        class="spec-input" value="{{ $attribute->unit }}"
+                                                        placeholder="jedn." style="width:90px;">
+                                                    <button type="button" class="icon-btn danger" title="Usuń"
+                                                        onclick="removeSpec({{ $index }})">×</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-        </td>
-    `;
-    
-    container.appendChild(row);
-    specIndex++;
-}
 
-function removeSpec(id) {
-    const row = document.getElementById('spec-' + id);
-    if (row) {
-        row.remove();
-    }
-}
-</script>
+            {{-- BOTTOM: Opis produktu на всю ширину (как ты хотел — заголовок как у spec + рамка) --}}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h2 class="h5 mb-0">Opis produktu (HTML)</h2>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="togglePreviewBtn">
+                                Podgląd
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="spec-scroll">
+                        <div class="p-3 p-md-4">
+                            <textarea name="description" id="descriptionInput" class="form-control edit-field"
+                                style="min-height: 280px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">{{ $product->description }}</textarea>
+
+                            <div id="descriptionPreviewWrap" style="display:none; margin-top: 1rem;">
+                                <div class="text-muted mb-2" style="font-size:.9rem;">Podgląd (tak będzie wyglądać na
+                                    stronie produktu):</div>
+                                <div id="descriptionPreview" class="p-3 border rounded" style="background:#fff;"></div>
+                            </div>
+
+                            <div class="text-muted mt-3" style="font-size:.9rem;">
+                                Wskazówka: możesz używać tagów HTML: <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>,
+                                <code>&lt;ul&gt;</code>, <code>&lt;img&gt;</code> itd.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Bottom fixed admin actions (красиво, Bootstrap) --}}
+            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
+                <a href="{{ route('product', $product->slug) }}" class="btn btn-secondary shadow-sm">
+                    Anuluj
+                </a>
+                <button type="submit" class="btn btn-warning shadow-sm d-flex align-items-center gap-2">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                    </svg>
+                    Zapisz zmiany
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    {{-- Модалка для просмотра фото (твоя) --}}
+    <div id="imageModal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ====== 1) thumbnails sync ======
+            const myCarousel = document.getElementById('productCarousel');
+            const thumbnails = document.querySelectorAll('.thumbnail-item');
+            if (myCarousel) {
+                myCarousel.addEventListener('slide.bs.carousel', function(event) {
+                    const index = event.to;
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    if (thumbnails[index]) thumbnails[index].classList.add('active');
+                });
+            }
+
+            // ====== 2) Image modal (твоя логика, но вынесена в функцию) ======
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.modal-close');
+
+            window.openImageModal = function(src) {
+                modal.style.display = 'flex';
+                modalImg.src = src;
+                document.body.style.overflow = 'hidden';
+            }
+
+            // open modal on click image container
+            document.querySelectorAll('.carousel-image-container').forEach(container => {
+                container.style.cursor = 'zoom-in';
+                container.addEventListener('click', function() {
+                    const src = this.getAttribute('data-image');
+                    if (src) openImageModal(src);
+                });
+            });
+
+            function closeModal() {
+                modal.style.display = 'none';
+                modalImg.src = '';
+                document.body.style.overflow = 'auto';
+            }
+            closeBtn?.addEventListener('click', closeModal);
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+            });
+
+            // ====== 3) Main image change (лучше UX) ======
+            const changeMainBtn = document.getElementById('changeMainBtn');
+            const mainImageInput = document.getElementById('mainImageInput');
+            const mainImagePreview = document.getElementById('mainImagePreview');
+            const thumbPreview = document.getElementById('thumbPreview');
+
+            changeMainBtn?.addEventListener('click', () => mainImageInput.click());
+
+            mainImageInput?.addEventListener('change', function() {
+                if (!this.files || !this.files[0]) return;
+                const file = this.files[0];
+
+                // basic image type guard
+                if (!file.type.startsWith('image/')) return;
+
+                const url = URL.createObjectURL(file);
+                if (mainImagePreview) mainImagePreview.src = url;
+                if (thumbPreview) thumbPreview.src = url;
+
+                // Если открыта модалка — обновим, чтобы не было несоответствия
+                // (не обязательно)
+            });
+
+            // ====== 4) Gallery add (исправление "кривого multiple upload") ======
+            const addGalleryBtn = document.getElementById('addGalleryBtn');
+            const galleryInput = document.getElementById('galleryImagesInput');
+            const newFilesPreview = document.getElementById('newFilesPreview');
+
+            addGalleryBtn?.addEventListener('click', () => galleryInput.click());
+
+            galleryInput?.addEventListener('change', function() {
+                if (!this.files) return;
+
+                newFilesPreview.innerHTML = '';
+                const files = Array.from(this.files).filter(f => f.type.startsWith('image/'));
+
+                if (files.length === 0) {
+                    newFilesPreview.style.display = 'none';
+                    return;
+                }
+
+                newFilesPreview.style.display = 'flex';
+
+                files.forEach(file => {
+                    const chip = document.createElement('div');
+                    chip.className = 'newfile-chip';
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.alt = 'new';
+
+                    const name = document.createElement('div');
+                    name.className = 'text-muted';
+                    name.style.fontSize = '.85rem';
+                    name.textContent = file.name.length > 18 ? (file.name.slice(0, 18) + '…') : file
+                        .name;
+
+                    chip.appendChild(img);
+                    chip.appendChild(name);
+                    newFilesPreview.appendChild(chip);
+                });
+            });
+
+            // ====== 5) Specs add/remove ======
+            let specIndex = {{ $product->attributes->count() }};
+            const addSpecBtn = document.getElementById('addSpecBtn');
+            const specsContainer = document.getElementById('specsContainer');
+
+            addSpecBtn?.addEventListener('click', function() {
+                const tr = document.createElement('tr');
+                tr.className = 'spec-row';
+                tr.id = `spec-${specIndex}`;
+                tr.innerHTML = `
+            <td class="spec-label">
+                <input type="text" name="specs[${specIndex}][name]" class="spec-input" placeholder="Nazwa cechy">
+            </td>
+            <td class="spec-value">
+                <div class="spec-row-actions">
+                    <input type="text" name="specs[${specIndex}][value]" class="spec-input" placeholder="Wartość" style="flex:1;">
+                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input" placeholder="jedn." style="width:90px;">
+                    <button type="button" class="icon-btn danger" title="Usuń" onclick="removeSpec(${specIndex})">×</button>
+                </div>
+            </td>
+        `;
+                specsContainer.appendChild(tr);
+                specIndex++;
+                syncSpecsMaxHeight();
+            });
+
+            window.removeSpec = function(id) {
+                const row = document.getElementById('spec-' + id);
+                if (row) row.remove();
+                syncSpecsMaxHeight();
+            }
+
+            // ====== 6) Specs height: max-height = граница FOTO (не миниатюры) ======
+            const carouselBox = document.getElementById('productCarousel'); // квадрат фото при карусели
+            const singleBox = document.querySelector('.product-single-image'); // квадрат фото при single
+            const buyBlock = document.getElementById('buyBlock');
+            const specHeader = document.getElementById('specHeader');
+            const specsScroll = document.getElementById('specsScroll');
+            const toggleBtn = document.getElementById('toggleSpecsBtn');
+            let expanded = false;
+
+            function getImageBoxHeight() {
+                if (carouselBox) return carouselBox.offsetHeight;
+                if (singleBox) return singleBox.offsetHeight;
+                return null;
+            }
+
+            function syncSpecsMaxHeight() {
+                if (!specsScroll || !buyBlock || !specHeader) return;
+
+                const isLg = window.matchMedia('(min-width: 992px)').matches;
+                if (!isLg) {
+                    specsScroll.style.maxHeight = '';
+                    return;
+                }
+                if (expanded) return;
+
+                const imgH = getImageBoxHeight();
+                if (!imgH) return;
+
+                const buyH = buyBlock.offsetHeight;
+                const headH = specHeader.offsetHeight;
+                const reserve = 16;
+
+                const max = Math.max(160, imgH - buyH - headH - reserve);
+                specsScroll.style.maxHeight = max + 'px';
+            }
+
+            syncSpecsMaxHeight();
+            window.addEventListener('resize', syncSpecsMaxHeight);
+
+            toggleBtn?.addEventListener('click', function() {
+                expanded = !expanded;
+                toggleBtn.textContent = expanded ? 'Zwiń' : 'Rozwiń';
+                if (expanded) specsScroll.style.maxHeight = '';
+                else syncSpecsMaxHeight();
+            });
+
+            // ====== 7) Description удобнее: live preview ======
+            const togglePreviewBtn = document.getElementById('togglePreviewBtn');
+            const descriptionInput = document.getElementById('descriptionInput');
+            const previewWrap = document.getElementById('descriptionPreviewWrap');
+            const preview = document.getElementById('descriptionPreview');
+
+            function renderPreview() {
+                // ВАЖНО: это просто предпросмотр. Если боишься XSS — делай sanitize на сервере.
+                preview.innerHTML = descriptionInput.value;
+            }
+
+            let previewOn = false;
+            togglePreviewBtn?.addEventListener('click', function() {
+                previewOn = !previewOn;
+                togglePreviewBtn.textContent = previewOn ? 'Edytuj' : 'Podgląd';
+                previewWrap.style.display = previewOn ? 'block' : 'none';
+                descriptionInput.style.display = previewOn ? 'none' : 'block';
+                if (previewOn) renderPreview();
+            });
+
+            // обновлять предпросмотр в реальном времени (когда он включён)
+            descriptionInput?.addEventListener('input', function() {
+                if (previewOn) renderPreview();
+            });
+
+        });
+    </script>
 
 @endsection

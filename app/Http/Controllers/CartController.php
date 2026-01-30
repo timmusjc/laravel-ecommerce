@@ -21,7 +21,7 @@ class CartController extends Controller
         return view('cart', compact('cart'));
     }
 
-    public function cartAdd($productId)
+    public function cartAdd(Request $request, $productId)
     {
 
         $cart = session()->get('cart', []);
@@ -41,7 +41,7 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return redirect()->route('cart');
+        return redirect()->back()->with('product_added', 'name');
     }
 
 

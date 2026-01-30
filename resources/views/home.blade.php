@@ -6,7 +6,7 @@
 
 @section('main_content')
     <div class="catalog-page py-4 py-md-5">
-        <div class="container-fluid p-0 mb-5"> <div class="container catalog-container"> <div id="heroCarousel" class="carousel slide carousel-fade hero-card shadow-lg" data-bs-ride="carousel" data-bs-interval="5000">
+        {{-- <div class="container-fluid p-0 mb-5"> <div class="container catalog-container"> <div id="heroCarousel" class="carousel slide carousel-fade hero-card shadow-lg" data-bs-ride="carousel" data-bs-interval="5000">
             
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
@@ -82,7 +82,7 @@
             </button>
         </div>
     </div>
-</div>
+</div> --}}
         <div class="container catalog-container">
             
             <div class="catalog-header-controls">
@@ -233,7 +233,7 @@
                                     {{ number_format($product->price, 2, ',', ' ') }} zł
                                 </div>
 
-                                <form action="{{ route('cart.add', $product) }}" method="POST">
+                                <form action="{{ route('cart.add', $product) }}" method="POST" data-add-to-cart>
                                     @csrf
                                     <button type="submit" class="btn-add-cart">
                                         <svg fill="currentColor" viewBox="0 0 16 16">

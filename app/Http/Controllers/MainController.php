@@ -17,35 +17,24 @@ class MainController extends Controller
      *
      * @return void
      */
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-
-
-    // ГЛАВНАЯ СТРАНИЦА
     public function home(Request $request)
     {
         $query = Product::query();
 
-        // Применяем сортировку (вынес в отдельную функцию, см. внизу, или можно дублировать)
         $this->applySorting($query, $request);
 
-        // По умолчанию 8 товаров
        $perPage = auth()->user()?->is_admin ? 7 : 8;
 
         $products = $query->paginate($perPage)->withQueryString();
         return view('home', compact('products'));
     }
 
-    // ПОИСК (Исправленный)
    public function search(Request $request)
 {
     $searchWord = $request->input('query');
@@ -87,26 +76,16 @@ class MainController extends Controller
         return view('about');
     }
 
-
-    // КАТЕГОРИЯ
     public function category($slug, Request $request)
     {   
         $perPage = auth()->user()?->is_admin ? 7 : 8;
         $category = Category::where('slug', $slug)->firstOrFail();
-
-        // 1. Берем запрос товаров этой категории (важно: скобки (), чтобы получить Builder)
         $query = $category->products();
-
-        // 2. Применяем ту же логику сортировки
         $this->applySorting($query, $request);
-
-        // 3. Пагинация
         $products = $query->paginate($perPage)->withQueryString();
-
         return view('category', compact('category', 'products'));
     }
 
-    // ВСПОМОГАТЕЛЬНЫЙ МЕТОД (чтобы не копировать код 3 раза)
     private function applySorting($query, Request $request)
     {
         if ($request->filled('sort')) {

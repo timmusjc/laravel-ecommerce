@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('payment_method')->default('card'); // card, blik, transfer
-            $table->string('payment_status')->default('pending'); // pending, paid, failed
+            $table->string('payment_method')->default('card');
+            $table->string('payment_status')->default('pending');
         });
     }
 

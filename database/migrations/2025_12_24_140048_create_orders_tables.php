@@ -13,22 +13,21 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Связь с юзером
-            $table->string('status')->default('new'); // new, processing, completed, cancelled
-            $table->decimal('total_price', 10, 2); // Итоговая сумма
-            $table->string('address'); // Адрес доставки
-            $table->string('phone');   // Телефон
-            $table->text('comment')->nullable(); // Комментарий
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('status')->default('new');
+            $table->decimal('total_price', 10, 2);
+            $table->string('address');
+            $table->string('phone');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
 
-        // Таблица ТОВАРОВ В ЗАКАЗЕ
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products'); // Какой товар
-            $table->integer('quantity'); // Сколько штук
-            $table->decimal('price', 10, 2); // Цена НА МОМЕНТ ПОКУПКИ (важно!)
+            $table->foreignId('product_id')->constrained('products');
+            $table->integer('quantity');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
@@ -38,7 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders_items');
+        Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
     }
 };

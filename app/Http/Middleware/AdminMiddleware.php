@@ -17,10 +17,9 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->is_admin) {
-        return $next($request); // Проходи, хозяин
+        return $next($request);
     }
 
-    // Если нет — отправляем на главную с ошибкой (или на страницу входа)
     return redirect('/')->with('error', 'Nie masz dostępu do tego działu!');
     }
 }

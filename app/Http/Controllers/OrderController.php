@@ -10,7 +10,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
-    // Показать форму оформления
     public function create()
     {
         $cart = session()->get('cart', []);
@@ -27,32 +26,21 @@ class OrderController extends Controller
         return view('checkout', compact('cart', 'total'));
     }
 
-    // Сохранить заказ в БД (ОБНОВЛЕННЫЙ МЕТОД)
     public function store(Request $request)
     {
 
-    // --- 1. ЗАЩИТА ОТ ПОВТОРНОЙ ОТПРАВКИ (FIX) ---
-        // Получаем корзину в самом начале
         $cart = session()->get('cart');
-
-        // Если корзины нет или она пустая — выкидываем пользователя
-        // Это спасет от ошибки "foreach argument must be array", если нажать "Назад"
         if (empty($cart)) {
             return redirect()->route('home')->with('error', 'Twój koszyk jest pusty! Zamówienie zostało już prawdopodobnie złożone.');
         }
-        // 1. Валидация данных (Добавили проверку оплаты)
         $request->validate([
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'payment_method' => 'required|in:card,blik', // Обязательно выбрать метод
-
-            // Если выбрана карта, нужен номер
+            'payment_method' => 'required|in:card,blik',
             'card_number' => 'required_if:payment_method,card',
-            // Если BLIK, нужен код (6 цифр)
             'blik_code' => 'required_if:payment_method,blik|digits:6|nullable',
         ]);
 
-        // 2. Получаем корзину
         $cart = session()->get('cart');
 
         $total = 0;
@@ -60,7 +48,6 @@ class OrderController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
-        // 3. Создаем ЗАКАЗ
         $order = Order::create([
             'user_id' => Auth::id(),
             'status' => 'new',
@@ -68,13 +55,10 @@ class OrderController extends Controller
             'address' => $request->address,
             'phone' => $request->phone,
             'comment' => $request->comment,
-
-            // НОВЫЕ ПОЛЯ ОПЛАТЫ
             'payment_method' => $request->payment_method,
-            'payment_status' => 'paid', // Сразу ставим "Оплачено" (симуляция)
+            'payment_status' => 'paid',
         ]);
 
-        // 4. Переносим товары
         foreach ($cart as $id => $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -84,14 +68,10 @@ class OrderController extends Controller
             ]);
         }
 
-        // 5. Очищаем корзину
         session()->forget('cart');
-
-        // 6. Редирект
         return redirect()->route('success', $order->id);
     }
 
-    // Остальные методы (success, downloadInvoice) оставляем без изменений...
     public function success(Order $order)
     {
         if ($order->user_id !== auth()->id()) {

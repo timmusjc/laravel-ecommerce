@@ -61,7 +61,7 @@ class MainController extends Controller
 
     public function product($slug)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::where('slug', $slug)->firstOrFail();
         return view('product', compact('product'));
     }
     public function categories()
@@ -109,14 +109,5 @@ class MainController extends Controller
         } else {
             $query->orderBy('created_at', 'desc');
         }
-    }
-
-    public function opinie_check(Request $request)
-    {
-        $valid = $request->validate([
-            'email' => 'required|email|min:4|max:100',
-            'subject' => 'required|min:4|max:100',
-            'message' => 'required|min:4|max:100'
-        ]);
     }
 }

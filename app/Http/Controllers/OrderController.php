@@ -29,19 +29,24 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        $cart = session()->get('cart');
+         $cart = session()->get('cart', []);
+
         if (empty($cart)) {
-            return redirect()->route('home')->with('error', 'Twój koszyk jest pusty! Zamówienie zostało już prawdopodobnie złożone.');
+            return redirect()->route('home')->with(
+                'error',
+                'Twój koszyk jest pusty! Zamówienie zostało już prawdopodobnie złożone.'
+            );
         }
+
         $request->validate([
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'payment_method' => 'required|in:card,blik',
-            'card_number' => 'required_if:payment_method,card',
-            'blik_code' => 'required_if:payment_method,blik|digits:6|nullable',
-        ]);
 
-        $cart = session()->get('cart');
+            'payment_method' => 'required|in:card,blik',
+
+            'card_number' => 'required_if:payment_method,card|digits_between:13,19',
+            'blik_code' => 'required_if:payment_method,blik|digits:6',
+        ]);
 
         $total = 0;
         foreach ($cart as $item) {
@@ -56,19 +61,20 @@ class OrderController extends Controller
             'phone' => $request->phone,
             'comment' => $request->comment,
             'payment_method' => $request->payment_method,
-            'payment_status' => 'paid',
+            'payment_status' => 'paid', // opcjonalnie: pending -> paid
         ]);
 
-        foreach ($cart as $id => $item) {
+        foreach ($cart as $productId => $item) {
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $id,
+                'product_id' => $productId,
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
             ]);
         }
 
         session()->forget('cart');
+
         return redirect()->route('success', $order->id);
     }
 
@@ -77,14 +83,16 @@ class OrderController extends Controller
         if ($order->user_id !== auth()->id()) {
             abort(403);
         }
+
         return view('success', compact('order'));
     }
 
     public function downloadInvoice(Order $order)
     {
         if ($order->user_id !== auth()->id() && !auth()->user()->is_admin) {
-        abort(403);
-    }
+            abort(403);
+        }
+
         $pdf = Pdf::loadView('order_pdf', compact('order'));
         return $pdf->download('faktura-nr-' . $order->id . '.pdf');
     }

@@ -53,6 +53,9 @@
                                 <label for="phone" class="form-label">Numer telefonu</label>
                                 <input type="tel" id="phone" class="form-control form-input" name="phone" required
                                     value="{{ old('phone') }}" placeholder="+48 123 456 789">
+                                    @error('phone')
+                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                        @enderror
                             </div>
 
                             <div class="mb-4">
@@ -87,10 +90,17 @@
 
                                         <div class="row g-2">
                                             <div class="col-6">
-                                                <input type="text" class="form-control" placeholder="MM/YY">
+                                                <input type="text" name="card_year" class="form-control" placeholder="MM/YY">
+                                                @error('card_year')
+                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                        @enderror
                                             </div>
+                                            
                                             <div class="col-6">
-                                                <input type="text" class="form-control" placeholder="CVC">
+                                                <input type="text" name="card_cvc" class="form-control" placeholder="CVC">
+                                                @error('card_cvc')
+                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                        @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -159,19 +169,13 @@
             }
         }
 
-        // 2. Имитация задержки оплаты
         document.getElementById('payment-form').addEventListener('submit', function(e) {
-            // Останавливаем стандартную отправку
             e.preventDefault();
-
-            // Включаем оверлей
             document.getElementById('loading-overlay').classList.remove('d-none');
-
-            // Ждем 2 секунды (имитация связи с банком)
             setTimeout(() => {
-                // Теперь реально отправляем форму
                 e.target.submit();
             }, 2000);
         });
+
     </script>
 @endsection

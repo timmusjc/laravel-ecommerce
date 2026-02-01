@@ -16,7 +16,7 @@
                 TEppLE
             </a>
             <div class="header-actions">
-    {{-- <!-- кнопка поиска -->
+                {{-- <!-- кнопка поиска -->
     <button class="icon-btn search-toggle">
         🔍
     </button>
@@ -25,7 +25,7 @@
         <input type="text" name="q" class="search-input" placeholder="Szukaj…">
         <button class="search-btn">🔍</button>
     </form> --}}
-</div>
+            </div>
             <!-- Wyszukiwanie -->
             <form action="{{ route('search') }}" method="GET" class="search-form">
                 <input type="search" name="query" class="search-input" placeholder="Szukaj" aria-label="Szukaj">
@@ -204,9 +204,50 @@
         </div>
     </header>
 
-   
+
     <!-- Основной контент -->
     <main class="">
+        {{-- FLASH MESSAGES --}}
+        @if (session('success') || session('error') || $errors->any())
+            <div class="container" style="max-width:1400px; margin-top: 1rem;">
+                {{-- success --}}
+                @if (session('success'))
+                    <div class="flash-msg flash-success" role="alert">
+                        <div class="flash-text">{{ session('success') }}</div>
+                        <button type="button" class="flash-close " aria-label="Zamknij"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+</svg>
+</button>
+                    </div>
+                @endif
+
+                {{-- error --}}
+                @if (session('error'))
+                    <div class="flash-msg flash-error" role="alert">
+                        <div class="flash-text">{{ session('error') }}</div>
+                        <button type="button" class="flash-close" aria-label="Zamknij"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+</svg>
+</button>
+                    </div>
+                @endif
+
+                {{-- validation errors --}}
+                @if ($errors->any())
+                    <div class="flash-msg flash-error" role="alert">
+                        <div class="flash-text">
+                            <div class="fw-semibold mb-1">Sprawdź formularz:</div>
+                            <ul class="mb-0 ps-3">
+                                @foreach ($errors->all() as $msg)
+                                    <li>{{ $msg }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button type="button" class="flash-close" aria-label="Zamknij">×</button>
+                    </div>
+                @endif
+            </div>
+        @endif
         @yield('main_content')
     </main>
 
@@ -214,7 +255,7 @@
     <footer class="site-footer">
         <div class="footer-container">
             <ul class="footer-nav">
-                <li><a href="{{route('home')}}" class="footer-link">Home</a></li>
+                <li><a href="{{ route('home') }}" class="footer-link">Home</a></li>
                 <li><a href="{{ route('cart') }}" class="footer-link">Koszyk</a></li>
                 <li><a href="{{ route('home') }}" class="footer-link">Produkty</a></li>
                 <li><a href="{{ route('categories') }}" class="footer-link">Kategorie</a></li>
@@ -227,22 +268,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.flash-msg').forEach(msg => {
-    const close = msg.querySelector('.flash-close');
-    close?.addEventListener('click', () => msg.remove());
+            document.querySelectorAll('.flash-msg').forEach(msg => {
+                const close = msg.querySelector('.flash-close');
+                close?.addEventListener('click', () => msg.remove());
 
-    // auto-hide
-    setTimeout(() => {
-      if (document.body.contains(msg)) msg.remove();
-    }, 5000);
-  });
-});
+                // auto-hide
+                setTimeout(() => {
+                    if (document.body.contains(msg)) msg.remove();
+                }, 5000);
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const menuBtn = document.querySelector('.mobile-menu-btn');
             const navMenu = document.querySelector('.main-nav');
 
-            
+
 
             if (menuBtn && navMenu) {
                 menuBtn.addEventListener('click', function() {
@@ -252,84 +293,50 @@
         });
 
         const searchBtn = document.querySelector('.search-toggle');
-const searchOverlay = document.getElementById('mobileSearch');
+        const searchOverlay = document.getElementById('mobileSearch');
 
-searchBtn.addEventListener('click', () => {
-    searchOverlay.classList.toggle('active');
-});
+        searchBtn.addEventListener('click', () => {
+            searchOverlay.classList.toggle('active');
+        });
     </script>
-    
 
 
-     {{-- FLASH MESSAGES --}}
-@if (session('success') || session('error') || $errors->any())
-    <div class="container" style="max-width:1400px; margin-top: 1rem;">
-        {{-- success --}}
-        @if (session('success'))
-            <div class="flash-msg flash-success" role="alert">
-                <div class="flash-text">{{ session('success') }}</div>
-                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
-            </div>
-        @endif
 
-        {{-- error --}}
-        @if (session('error'))
-            <div class="flash-msg flash-error" role="alert">
-                <div class="flash-text">{{ session('error') }}</div>
-                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
-            </div>
-        @endif
 
-        {{-- validation errors --}}
-        @if ($errors->any())
-            <div class="flash-msg flash-error" role="alert">
-                <div class="flash-text">
-                    <div class="fw-semibold mb-1">Sprawdź formularz:</div>
-                    <ul class="mb-0 ps-3">
-                        @foreach ($errors->all() as $msg)
-                            <li>{{ $msg }}</li>
-                        @endforeach
-                    </ul>
+
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 14px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Produkt dodany do koszyka</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
                 </div>
-                <button type="button" class="flash-close" aria-label="Zamknij">×</button>
+
+                <div class="modal-body">
+                    Chcesz przejść do koszyka czy kontynuować zakupy?
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
+                        Kontynuuj zakupy
+                    </button>
+                    <a href="{{ route('cart') }}" class="btn btn-dark">
+                        Przejdź do koszyka
+                    </a>
+                </div>
             </div>
-        @endif
+        </div>
     </div>
-@endif
-
-<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius: 14px;">
-      <div class="modal-header">
-        <h5 class="modal-title">Produkt dodany do koszyka</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
-      </div>
-
-      <div class="modal-body">
-        Chcesz przejść do koszyka czy kontynuować zakupy?
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
-          Kontynuuj zakupy
-        </button>
-        <a href="{{ route('cart') }}" class="btn btn-dark">
-          Przejdź do koszyka
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
 
 
-@if(session('product_added'))
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
-        myModal.show();
-    });
-</script>
-@endif
+    @if (session('product_added'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                myModal.show();
+            });
+        </script>
+    @endif
 
 </body>
 

@@ -17,7 +17,7 @@
                         <i class="bi bi-file-earmark-pdf"></i> Pobierz fakturę
                     </a>
 
-                    <a href="{{ route('home') }}" class="btn btn-primary px-4">
+                    <a href="{{ route('home') }}" class="btn btn-dark px-4">
                         Wróć do sklepu
                     </a>
                 </div>

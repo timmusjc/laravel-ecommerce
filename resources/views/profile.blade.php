@@ -89,11 +89,11 @@
                                 </div>
                             </div>
 
-                            <!-- Редактирование имени -->
+                            
                             <div class="profile-section">
                                 <h3 class="section-heading">Dane osobowe</h3>
                                 <div class="form-group">
-                                    <label class="form-label">Imię</label>
+                                    <label class="form-label">Imię i nazwisko</label>
                                     <input type="text" name="name" class="form-input" value="{{ $user->name }}"
                                         required>
                                 </div>
@@ -101,7 +101,7 @@
                             </div>
                         </form>
 
-                        <!-- Форма смены пароля -->
+                        
                         <form action="{{ route('profile.password') }}" method="POST" class="profile-section">
                             @csrf
                             <h3 class="section-heading section-heading-danger">Zmiana hasła</h3>

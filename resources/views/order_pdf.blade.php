@@ -107,11 +107,10 @@
                     style="background-color: #e0e0e0; color: #000000; padding: 10px; display: inline-block; font-weight: bold; font-size: 24px;">
                     TEppLE
                 </div>
-                <div style="font-size: 10px; margin-top: 5px;">SKLEP Z ELEKTRONIKĄ</div>
             </td>
             <td width="50%" align="right">
                 <div class="invoice-title">Faktura nr: FV/{{ $order->id }}/{{ $order->created_at->format('Y') }}</div>
-                <div style="color: blue; font-weight: bold;">Oryginał</div>
+                <div style="color: rgb(0, 0, 0); font-weight: bold;">Oryginał</div>
                 <br>
                 Miejscowość: <strong>Warszawa</strong><br>
                 Data wystawienia: {{ $order->created_at->format('d.m.Y') }}<br>
@@ -219,8 +218,6 @@
         <div class="big-total">
             Razem do zapłaty: {{ number_format($order->total_price, 2, ',', ' ') }} PLN
         </div>
-        <div style="margin-top: 5px;">
-            Słownie: <i>(kwota słownie generowana automatycznie)</i> </div>
 
         <div style="margin-top: 10px;">
             Sposób zapłaty: <strong>

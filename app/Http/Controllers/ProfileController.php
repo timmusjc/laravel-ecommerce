@@ -24,37 +24,34 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
         $user->name = $request->name;
-
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
-
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
         }
-
         $user->save();
-
-        return redirect()->route('profile')->with('success', 'Profil został zaktualizowany!');
+        return redirect()->route('profile')
+        ->with('success', 'Profil został zaktualizowany!');
     }
+
+
     public function updatePassword(Request $request)
     {
         $request->validate([
             'current_password' => 'required',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
         $user = Auth::user();
-
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Obecne hasło jest nieprawidłowe']);
+            return back()->withErrors(['current_password'
+             => 'Obecne hasło jest nieprawidłowe']);
         }
-
         $user->password = Hash::make($request->password);
         $user->save();
         return back()->with('success', 'Hasło zostało zmienione pomyślnie!');
     }
+    
 }

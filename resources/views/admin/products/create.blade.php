@@ -381,12 +381,9 @@
             @csrf
 
             <div class="row g-4 g-lg-5 align-items-stretch" id="topRow">
-
-                {{-- LEFT: media (как в edit) --}}
                 <div class="col-lg-6" id="leftCol">
 
                     <div class="product-carousel-wrapper">
-                        <!-- Главное фото -->
                         <div class="product-single-image">
                             <div class="carousel-image-container" id="mainImageContainer" data-image="">
                                 <div class="image-upload-placeholder" id="mainPlaceholder">
@@ -403,8 +400,6 @@
                         </div>
 
                     </div>
-
-                    {{-- Controls under media (те же кнопки что в edit) --}}
                     <div class="mt-3 d-grid gap-2">
                         <div class="buy-card">
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
@@ -436,20 +431,20 @@
 
                 </div>
 
-                {{-- RIGHT: fields + specs (как в edit) --}}
                 <div class="col-lg-6 d-flex" id="rightCol">
                     <div class="d-flex flex-column w-100" id="rightBox">
 
-                        {{-- Buy-like block --}}
                         <div class="buy-card mb-3" id="buyBlock">
                             <div class="mb-2">
                                 <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
                                 <select name="category_id" class="edit-category editable-like" required>
-                                     <option value="" disabled {{ empty($selectedCategoryId) ? 'selected' : '' }}>-- Wybierz kategorię --</option>
+                                    <option value="" disabled {{ empty($selectedCategoryId) ? 'selected' : '' }}>--
+                                        Wybierz kategorię --</option>
                                     @foreach ($categories as $cat)
-                                       <option value="{{ $cat->id }}" {{ (string)$selectedCategoryId === (string)$cat->id ? 'selected' : '' }}>
-                                         {{ $cat->name }}
-                                         </option>
+                                        <option value="{{ $cat->id }}"
+                                            {{ (string) $selectedCategoryId === (string) $cat->id ? 'selected' : '' }}>
+                                            {{ $cat->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -481,7 +476,6 @@
                             </div>
                         </div>
 
-                        {{-- Specyfikacja (как в edit) --}}
                         <div class="d-flex align-items-center justify-content-between mb-2" id="specHeader">
                             <h2 class="h5 mb-0">Specyfikacja techniczna</h2>
                             <button type="button" class="btn btn-outline-dark btn-sm" id="addSpecBtn">
@@ -499,8 +493,6 @@
                 </div>
 
             </div>
-
-            {{-- BOTTOM: Opis produktu (как в edit) --}}
             <div class="row mt-5">
                 <div class="col-12">
                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -524,8 +516,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- Bottom fixed admin actions (как в edit) --}}
             <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
                 <a href="{{ route('home') }}" class="btn btn-secondary shadow-sm">
                     Anuluj
@@ -542,7 +532,6 @@
         </form>
     </div>
 
-    {{-- Модалка (для preview главного фото) --}}
     <div id="imageModal" class="image-modal">
         <span class="modal-close">&times;</span>
         <img class="modal-content" id="modalImage">
@@ -550,8 +539,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // ====== MODAL (как в edit) ======
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const closeBtn = document.querySelector('.modal-close');
@@ -576,7 +563,6 @@
                 if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
             });
 
-            // ====== MAIN IMAGE ======
             const mainPlaceholder = document.getElementById('mainPlaceholder');
             const mainInput = document.getElementById('mainImageInput');
             const changeMainBtn = document.getElementById('changeMainBtn');
@@ -603,22 +589,19 @@
                 if (this.files && this.files[0]) setMainPreview(this.files[0]);
             });
 
-            // click on image to zoom
             mainContainer.style.cursor = 'zoom-in';
             mainContainer.addEventListener('click', function() {
                 const src = this.getAttribute('data-image');
                 if (src) openImageModal(src);
             });
 
-            // ====== GALLERY FILES (как в edit: кнопка + preview chips + remove) ======
             const addGalleryBtn = document.getElementById('addGalleryBtn');
             const galleryInput = document.getElementById('galleryImagesInput');
             const newFilesPreview = document.getElementById('newFilesPreview');
 
-            let galleryFiles = []; // держим собственный список, чтобы можно было удалять отдельные
+            let galleryFiles = [];
 
             function syncGalleryInputFiles() {
-                // пересобираем FileList через DataTransfer
                 const dt = new DataTransfer();
                 galleryFiles.forEach(f => dt.items.add(f));
                 galleryInput.files = dt.files;
@@ -670,10 +653,8 @@
                 const files = Array.from(this.files || []).filter(f => f.type.startsWith('image/'));
                 if (!files.length) return;
 
-                // добавляем к уже выбранным (а не перетираем)
                 galleryFiles = galleryFiles.concat(files);
 
-                // простая защита от дублей по имени+размеру
                 const seen = new Set();
                 galleryFiles = galleryFiles.filter(f => {
                     const key = f.name + ':' + f.size;
@@ -686,7 +667,6 @@
                 renderGalleryChips();
             });
 
-            // ====== SPECS (как в edit) ======
             let specIndex = 0;
             const addSpecBtn = document.getElementById('addSpecBtn');
             const specsContainer = document.getElementById('specsContainer');
@@ -713,9 +693,8 @@
             }
 
             addSpecBtn?.addEventListener('click', addSpecRow);
-            addSpecRow(); // одна строка по умолчанию
+            addSpecRow();
 
-            // ====== DESCRIPTION preview toggle (как в edit) ======
             const togglePreviewBtn = document.getElementById('togglePreviewBtn');
             const descriptionInput = document.getElementById('descriptionInput');
             const previewWrap = document.getElementById('descriptionPreviewWrap');

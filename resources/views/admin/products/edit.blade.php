@@ -566,10 +566,8 @@
             @csrf
             @method('PUT')
 
-            {{-- TOP (как на странице товара) --}}
             <div class="row g-4 g-lg-5 align-items-stretch" id="topRow">
 
-                {{-- LEFT: media --}}
                 <div class="col-lg-6" id="leftCol">
                     @php
                         $hasGallery = $product->images->count() > 0;
@@ -580,7 +578,6 @@
                             <div id="productCarousel" class="carousel slide">
                                 <div class="carousel-inner">
 
-                                    {{-- Main photo --}}
                                     <div class="carousel-item active">
                                         <div class="carousel-image-container"
                                             data-image="{{ asset('storage/' . $product->image) }}">
@@ -589,7 +586,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- Existing gallery --}}
                                     @foreach ($product->images as $galleryImg)
                                         <div class="carousel-item">
                                             <div class="carousel-image-container"
@@ -628,9 +624,8 @@
                         </div>
                     @endif
 
-                    {{-- Controls under media (админские формы красиво) --}}
                     <div class="mt-3 d-grid gap-2">
-                        
+
                         <div class="buy-card">
 
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
@@ -648,21 +643,17 @@
                             </div>
 
                             <input type="file" name="image" id="mainImageInput" class="d-none" accept="image/*">
-                            <input type="file"
-       name="images[]"
-       id="galleryImagesInput"
-       class="d-none"
-       accept="image/*"
-       multiple>
+                            <input type="file" name="images[]" id="galleryImagesInput" class="d-none" accept="image/*"
+                                multiple>
 
                             <div class="text-muted mt-2" style="font-size:.9rem;">
                                 Główne zdjęcie wyświetla się jako pierwsze. Galeria to dodatkowe zdjęcia w karuzeli.
                             </div>
 
                             <div id="newFilesPreview" class="newfiles-list" style="display:none;"></div>
-                            
+
                         </div>
-                        {{-- Existing gallery management --}}
+
                         @if ($product->images->count() > 0)
                             <div class="buy-card">
                                 <div class="fw-semibold mb-2">Aktualna galeria</div>
@@ -705,13 +696,10 @@
                     </div>
                 </div>
 
-                {{-- RIGHT: fields + specs до границы фото --}}
                 <div class="col-lg-6 d-flex" id="rightCol">
                     <div class="d-flex flex-column w-100" id="rightBox">
 
-                        {{-- Buy-like block (но с формами) --}}
                         <div class="buy-card mb-3" id="buyBlock">
-                            {{-- Категория (не широкая) --}}
                             <div class="mb-2">
                                 <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
                                 <select name="category_id" class="edit-category editable-like" required>
@@ -724,14 +712,12 @@
                                 </select>
                             </div>
 
-                            {{-- Название --}}
                             <div class="mb-2">
                                 <label class="text-muted" style="font-size:.9rem;">Nazwa produktu</label>
                                 <input type="text" name="name" class="edit-name editable-like"
                                     value="{{ $product->name }}" required>
                             </div>
 
-                            {{-- Цена (без стрелочек, zł визуально внутри) --}}
                             <div class="mb-3">
                                 <label class="text-muted" style="font-size:.9rem;">Cena</label><br>
                                 <div class="price-wrap">
@@ -743,7 +729,6 @@
                                 </div>
                             </div>
 
-                            {{-- Кнопка как на товаре --}}
                             <button type="button"
                                 class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden buy-btn"
                                 disabled style="opacity:.6; cursor:not-allowed;">
@@ -757,7 +742,6 @@
                             </div>
                         </div>
 
-                        {{-- Specyfikacja: scroll max do granicy FOTO, не до миниатюр --}}
                         <div class="d-flex align-items-center justify-content-between mb-2" id="specHeader">
                             <h2 class="h5 mb-0">Specyfikacja techniczna</h2>
                             <div class="d-flex gap-2">
@@ -806,7 +790,6 @@
 
             </div>
 
-            {{-- BOTTOM: Opis produktu на всю ширину (как ты хотел — заголовок как у spec + рамка) --}}
             <div class="row mt-5">
                 <div class="col-12">
                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -839,7 +822,6 @@
                 </div>
             </div>
 
-            {{-- Bottom fixed admin actions (красиво, Bootstrap) --}}
             <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
                 <a href="{{ route('product', $product->slug) }}" class="btn btn-secondary shadow-sm">
                     Anuluj
@@ -856,7 +838,6 @@
         </form>
     </div>
 
-    {{-- Модалка для просмотра фото (твоя) --}}
     <div id="imageModal" class="image-modal">
         <span class="modal-close">&times;</span>
         <img class="modal-content" id="modalImage">
@@ -864,8 +845,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // ====== 1) thumbnails sync ======
             const myCarousel = document.getElementById('productCarousel');
             const thumbnails = document.querySelectorAll('.thumbnail-item');
             if (myCarousel) {
@@ -876,7 +855,6 @@
                 });
             }
 
-            // ====== 2) Image modal (твоя логика, но вынесена в функцию) ======
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const closeBtn = document.querySelector('.modal-close');
@@ -887,7 +865,6 @@
                 document.body.style.overflow = 'hidden';
             }
 
-            // open modal on click image container
             document.querySelectorAll('.carousel-image-container').forEach(container => {
                 container.style.cursor = 'zoom-in';
                 container.addEventListener('click', function() {
@@ -909,7 +886,6 @@
                 if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
             });
 
-            // ====== 3) Main image change (лучше UX) ======
             const changeMainBtn = document.getElementById('changeMainBtn');
             const mainImageInput = document.getElementById('mainImageInput');
             const mainImagePreview = document.getElementById('mainImagePreview');
@@ -921,18 +897,13 @@
                 if (!this.files || !this.files[0]) return;
                 const file = this.files[0];
 
-                // basic image type guard
                 if (!file.type.startsWith('image/')) return;
 
                 const url = URL.createObjectURL(file);
                 if (mainImagePreview) mainImagePreview.src = url;
                 if (thumbPreview) thumbPreview.src = url;
-
-                // Если открыта модалка — обновим, чтобы не было несоответствия
-                // (не обязательно)
             });
 
-            // ====== 4) Gallery add (исправление "кривого multiple upload") ======
             const addGalleryBtn = document.getElementById('addGalleryBtn');
             const galleryInput = document.getElementById('galleryImagesInput');
             const newFilesPreview = document.getElementById('newFilesPreview');
@@ -972,7 +943,6 @@
                 });
             });
 
-            // ====== 5) Specs add/remove ======
             let specIndex = {{ $product->attributes->count() }};
             const addSpecBtn = document.getElementById('addSpecBtn');
             const specsContainer = document.getElementById('specsContainer');
@@ -1004,9 +974,8 @@
                 syncSpecsMaxHeight();
             }
 
-            // ====== 6) Specs height: max-height = граница FOTO (не миниатюры) ======
-            const carouselBox = document.getElementById('productCarousel'); // квадрат фото при карусели
-            const singleBox = document.querySelector('.product-single-image'); // квадрат фото при single
+            const carouselBox = document.getElementById('productCarousel');
+            const singleBox = document.querySelector('.product-single-image');
             const buyBlock = document.getElementById('buyBlock');
             const specHeader = document.getElementById('specHeader');
             const specsScroll = document.getElementById('specsScroll');
@@ -1050,14 +1019,12 @@
                 else syncSpecsMaxHeight();
             });
 
-            // ====== 7) Description удобнее: live preview ======
             const togglePreviewBtn = document.getElementById('togglePreviewBtn');
             const descriptionInput = document.getElementById('descriptionInput');
             const previewWrap = document.getElementById('descriptionPreviewWrap');
             const preview = document.getElementById('descriptionPreview');
 
             function renderPreview() {
-                // ВАЖНО: это просто предпросмотр. Если боишься XSS — делай sanitize на сервере.
                 preview.innerHTML = descriptionInput.value;
             }
 
@@ -1070,7 +1037,6 @@
                 if (previewOn) renderPreview();
             });
 
-            // обновлять предпросмотр в реальном времени (когда он включён)
             descriptionInput?.addEventListener('input', function() {
                 if (previewOn) renderPreview();
             });

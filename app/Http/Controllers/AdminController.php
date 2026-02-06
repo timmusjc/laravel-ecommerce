@@ -29,13 +29,15 @@ class AdminController extends Controller
     }
 
     //  Lista zamówień
+
+
     public function orders()
     {
-        $orders = Order::with(['user', 'items.product'])->latest()->paginate(15);
+        $orders = Order::with(['user', 'items.product'])
+        ->latest()->paginate(15);
         return view('admin.orders', compact('orders'));
     }
 
-    // Zmiana statusu zamówienia
     public function updateOrderStatus(Request $request, Order $order)
     {
         $request->validate([
@@ -48,7 +50,8 @@ class AdminController extends Controller
     public function deleteOrder(Order $order)
     {
         $order->delete();
-        return redirect()->back()->with('success', 'Zamówienie zostało trwale usunięte.');
+        return redirect()->back()
+        ->with('success', 'Zamówienie zostało trwale usunięte.');
     }
 
     // Utworzenie nowego produktu

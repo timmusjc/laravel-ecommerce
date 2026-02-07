@@ -90,7 +90,7 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             @guest
                                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16"
-                                    style="vertical-align: text-bottom;">
+                                    class="u-text-bottom">
                                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                     <path fill-rule="evenodd"
                                         d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
@@ -98,8 +98,8 @@
                             @else
                                 @if (Auth::user()->avatar)
                                     <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
-                                        class="rounded-circle border border-2" width="24" height="24"
-                                        style="object-fit: cover; vertical-align: text-bottom;" alt="Avatar">
+                                        class="rounded-circle border border-2 u-avatar-img" width="24" height="24"
+                                        alt="Avatar">
                                 @else
                                     <span class="user-avatar-badge">
                                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -113,7 +113,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('login') }}">
                                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
-                                            style="vertical-align: text-bottom; margin-right: 0.5rem;">
+                                            class="u-text-bottom-mr">
                                             <path fill-rule="evenodd"
                                                 d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
                                             <path fill-rule="evenodd"
@@ -126,7 +126,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ route('register') }}">
                                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
-                                                style="vertical-align: text-bottom; margin-right: 0.5rem;">
+                                                class="u-text-bottom-mr">
                                                 <path
                                                     d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                                 <path
@@ -146,7 +146,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('profile') }}">
                                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
-                                            style="vertical-align: text-bottom; margin-right: 0.5rem;">
+                                            class="u-text-bottom-mr">
                                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                                             <path fill-rule="evenodd"
                                                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
@@ -158,7 +158,7 @@
                                     <li>
                                         <a class="dropdown-item text-danger" href="{{ route('admin.index') }}">
                                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
-                                                style="vertical-align: text-bottom; margin-right: 0.5rem;">
+                                                class="u-text-bottom-mr">
                                                 <path
                                                     d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
                                                 <path
@@ -175,7 +175,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
-                                            style="vertical-align: text-bottom; margin-right: 0.5rem;">
+                                            class="u-text-bottom-mr">
                                             <path fill-rule="evenodd"
                                                 d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
                                             <path fill-rule="evenodd"
@@ -209,7 +209,7 @@
     <main class="">
         {{-- FLASH MESSAGES --}}
         @if (session('success') || session('error') || $errors->any())
-            <div class="container" style="max-width:1400px; margin-top: 1rem;">
+            <div class="container u-max-width-1400 u-margin-top-1">
                 {{-- success --}}
                 @if (session('success'))
                     <div class="flash-msg flash-success" role="alert">
@@ -306,7 +306,7 @@
 
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 14px;">
+            <div class="modal-content u-border-radius-14">
                 <div class="modal-header">
                     <h5 class="modal-title">Produkt dodany do koszyka</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>

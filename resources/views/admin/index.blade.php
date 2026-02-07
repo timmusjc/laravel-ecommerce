@@ -104,18 +104,4 @@
         </div>
     </div>
 
-    <style>
-        .hover-card {
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .hover-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
-        }
-
-        .border-dashed {
-            border: 2px dashed #dee2e6 !important;
-        }
-    </style>
 @endsection

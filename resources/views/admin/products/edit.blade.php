@@ -4,561 +4,7 @@
 
 @section('main_content')
 
-    <style>
-        /* ====== Твой стиль карусели/миниатюр (оставляем) ====== */
-        .product-carousel-wrapper {
-            width: 100%;
-        }
-
-        .carousel {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-
-        .carousel-item {
-            height: 100%;
-        }
-
-        .carousel-image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .carousel-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .product-single-image {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .product-single-image .carousel-image-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(17, 24, 39, 0.7);
-            border-radius: 50%;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .carousel:hover .carousel-control-prev,
-        .carousel:hover .carousel-control-next {
-            opacity: 1;
-        }
-
-        .carousel-control-prev {
-            left: 1rem;
-        }
-
-        .carousel-control-next {
-            right: 1rem;
-        }
-
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            background: rgba(17, 24, 39, 0.9);
-        }
-
-        .carousel-arrow {
-            width: 20px;
-            height: 20px;
-            color: white;
-        }
-
-        .carousel-thumbnails {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: .75rem;
-        }
-
-        .thumbnail-item {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all .2s ease;
-        }
-
-        .thumbnail-item:hover {
-            border-color: #9ca3af;
-        }
-
-        .thumbnail-item.active {
-            border-color: #111827;
-            box-shadow: 0 0 0 1px #111827;
-        }
-
-        .thumbnail-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: .5rem;
-        }
-
-        /* ====== Модалка (оставляем твою) ====== */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn .3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            animation: zoomIn .3s ease;
-        }
-
-        @keyframes zoomIn {
-            from {
-                transform: scale(.8);
-            }
-
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            color: white;
-            font-size: 3rem;
-            font-weight: 300;
-            cursor: pointer;
-            transition: opacity .2s ease;
-            line-height: 1;
-            z-index: 10001;
-        }
-
-        .modal-close:hover {
-            opacity: .7;
-        }
-
-        /* ====== Новый стиль формы (минимально, под твой дизайн) ====== */
-        .product-title {
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
-            margin-bottom: .75rem;
-        }
-
-        .product-price {
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            margin-bottom: 1rem;
-        }
-
-        .buy-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .edit-field {
-            border: 2px dashed transparent;
-            border-radius: 8px;
-            transition: all .2s ease;
-        }
-
-        .edit-field:focus {
-            outline: none;
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .spec-scroll {
-            overflow: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: #fff;
-        }
-
-        .spec-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-
-        .spec-table td {
-            padding: .75rem .9rem;
-            border-bottom: 1px solid #eef2f7;
-            vertical-align: top;
-        }
-
-        .spec-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .spec-label {
-            color: #6b7280;
-            width: 45%;
-        }
-
-        .spec-value {
-            font-weight: 600;
-            color: #111827;
-        }
-
-        /* input внутри таблицы — без ломания верстки */
-        .spec-input {
-            width: 100%;
-            border: 1px dashed transparent;
-            border-radius: 6px;
-            padding: .4rem .5rem;
-            transition: all .15s ease;
-            background: transparent;
-        }
-
-        .spec-input:focus {
-            outline: none;
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .spec-row-actions {
-            display: flex;
-            gap: .5rem;
-            align-items: center;
-        }
-
-        .icon-btn {
-            border: none;
-            background: transparent;
-            padding: .35rem .5rem;
-            border-radius: 8px;
-            transition: all .15s ease;
-        }
-
-        .icon-btn:hover {
-            background: #f3f4f6;
-        }
-
-        .icon-btn.danger {
-            color: #dc2626;
-        }
-
-        .icon-btn.danger:hover {
-            background: #fee2e2;
-        }
-
-        /* Галерея существующих фото — чекбокс удаления */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: .75rem;
-        }
-
-        .gallery-tile {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .gallery-tile .imgbox {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-        }
-
-        .gallery-tile img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: .5rem;
-        }
-
-        .gallery-tile .tile-footer {
-            padding: .5rem .65rem;
-            border-top: 1px solid #eef2f7;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: .5rem;
-            font-size: .85rem;
-        }
-
-        /* Preview новых файлов */
-        .newfiles-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .75rem;
-            margin-top: .75rem;
-        }
-
-        .newfile-chip {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 999px;
-            padding: .35rem .6rem;
-            background: #fff;
-        }
-
-        .newfile-chip img {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        @media (max-width: 991px) {
-            .carousel-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: .5rem;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .carousel-image-container {
-                padding: 1rem;
-            }
-
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 32px;
-                height: 32px;
-            }
-
-            .carousel-arrow {
-                width: 16px;
-                height: 16px;
-            }
-
-            .carousel-control-prev {
-                left: .5rem;
-            }
-
-            .carousel-control-next {
-                right: .5rem;
-            }
-
-            .carousel-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            }
-
-            .modal-close {
-                top: 1rem;
-                right: 1rem;
-                font-size: 2.5rem;
-            }
-        }
-
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* Стили полей в твоём стиле */
-        .editable-like {
-            border: 2px dashed transparent;
-            border-radius: 10px;
-            transition: all .2s ease;
-            background: transparent;
-        }
-
-        .editable-like:focus {
-            outline: none;
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        /* Название (инпут выглядит как заголовок товара) */
-        .edit-name {
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
-            padding: .35rem .6rem;
-            width: 100%;
-        }
-
-        /* Цена (крупно, но аккуратно) */
-        .price-wrap {
-            position: relative;
-            display: inline-block;
-        }
-
-        .edit-price {
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            padding: .35rem 2.2rem .35rem .6rem;
-            /* справа место под "zł" */
-            width: 220px;
-            /* не во всю ширину */
-        }
-
-        .price-suffix {
-            position: absolute;
-            right: .7rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 500;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            color: #111827;
-            pointer-events: none;
-        }
-
-        /* Категория НЕ на всю ширину */
-        .edit-category {
-            width: auto;
-            min-width: 220px;
-            padding: .45rem .6rem;
-            font-weight: 600;
-            color: #111827;
-            background: transparent;
-            border-radius: 10px;
-        }
-
-        /* Кнопка "Dodaj do koszyka" как на товаре */
-        .buy-btn {
-            width: 100%;
-        }
-
-        /* Кнопки под фото — аккуратно */
-        .media-actions {
-            display: flex;
-            gap: .5rem;
-            flex-wrap: wrap;
-        }
-
-        /* Кнопка-иконка вместо текста Podgląd (чтобы не не влезало) */
-        .icon-chip {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            transition: all .15s ease;
-        }
-
-        .icon-chip:hover {
-            background: #f3f4f6;
-        }
-
-        /* Галерея плиткой */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: .75rem;
-        }
-
-        .gallery-tile {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .gallery-tile .imgbox {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-        }
-
-        .gallery-tile img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: .5rem;
-        }
-
-        .gallery-tile .tile-footer {
-            padding: .5rem .65rem;
-            border-top: 1px solid #eef2f7;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: .4rem;
-            font-size: .85rem;
-        }
-    </style>
+    
 
     <div class="container product-page py-4 py-md-5">
         <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data"
@@ -579,7 +25,7 @@
                                 <div class="carousel-inner">
 
                                     <div class="carousel-item active">
-                                        <div class="carousel-image-container"
+                                        <div class="carousel-image-container zoomable"
                                             data-image="{{ asset('storage/' . $product->image) }}">
                                             <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}"
                                                 alt="{{ $product->name }}">
@@ -588,7 +34,7 @@
 
                                     @foreach ($product->images as $galleryImg)
                                         <div class="carousel-item">
-                                            <div class="carousel-image-container"
+                                            <div class="carousel-image-container zoomable"
                                                 data-image="{{ asset('storage/' . $galleryImg->path) }}">
                                                 <img src="{{ asset('storage/' . $galleryImg->path) }}"
                                                     alt="{{ $product->name }}">
@@ -617,7 +63,7 @@
                         </div>
                     @else
                         <div class="product-single-image">
-                            <div class="carousel-image-container" data-image="{{ asset('storage/' . $product->image) }}">
+                            <div class="carousel-image-container zoomable" data-image="{{ asset('storage/' . $product->image) }}">
                                 <img id="mainImagePreview" src="{{ asset('storage/' . $product->image) }}"
                                     alt="{{ $product->name }}">
                             </div>
@@ -646,11 +92,11 @@
                             <input type="file" name="images[]" id="galleryImagesInput" class="d-none" accept="image/*"
                                 multiple>
 
-                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                            <div class="text-muted mt-2 u-font-size-09">
                                 Główne zdjęcie wyświetla się jako pierwsze. Galeria to dodatkowe zdjęcia w karuzeli.
                             </div>
 
-                            <div id="newFilesPreview" class="newfiles-list" style="display:none;"></div>
+                            <div id="newFilesPreview" class="newfiles-list u-display-none"></div>
 
                         </div>
 
@@ -687,7 +133,7 @@
                                     @endforeach
                                 </div>
 
-                                <div class="text-muted mt-2" style="font-size:.9rem;">
+                                <div class="text-muted mt-2 u-font-size-09">
                                     Zaznacz zdjęcia do usunięcia i kliknij “Zapisz”.
                                 </div>
                             </div>
@@ -701,7 +147,7 @@
 
                         <div class="buy-card mb-3" id="buyBlock">
                             <div class="mb-2">
-                                <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
+                                <label class="text-muted u-font-size-09">Kategoria</label><br>
                                 <select name="category_id" class="edit-category editable-like" required>
                                     @foreach ($categories as $cat)
                                         <option value="{{ $cat->id }}"
@@ -713,13 +159,13 @@
                             </div>
 
                             <div class="mb-2">
-                                <label class="text-muted" style="font-size:.9rem;">Nazwa produktu</label>
+                                <label class="text-muted u-font-size-09">Nazwa produktu</label>
                                 <input type="text" name="name" class="edit-name editable-like"
                                     value="{{ $product->name }}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="text-muted" style="font-size:.9rem;">Cena</label><br>
+                                <label class="text-muted u-font-size-09">Cena</label><br>
                                 <div class="price-wrap">
                                     <input type="text" inputmode="decimal" name="price"
                                         class="edit-price editable-like"
@@ -730,14 +176,14 @@
                             </div>
 
                             <button type="button"
-                                class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden buy-btn"
-                                disabled style="opacity:.6; cursor:not-allowed;">
+                                class="btn btn-dark btn-lg border-0 shadow-lg position-relative overflow-hidden buy-btn u-opacity-60"
+                                disabled>
                                 <div class="fw-bold text-uppercase">
                                     <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
                                 </div>
                             </button>
 
-                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                            <div class="text-muted mt-2 u-font-size-09">
                                 (Podgląd — przycisk nieaktywny na stronie edycji)
                             </div>
                         </div>
@@ -771,10 +217,10 @@
                                                 <div class="spec-row-actions">
                                                     <input type="text" name="specs[{{ $index }}][value]"
                                                         class="spec-input" value="{{ $attribute->pivot->value }}"
-                                                        placeholder="Wartość" style="flex:1;">
+                                                        placeholder="Wartość" class="spec-input spec-input-flex">
                                                     <input type="text" name="specs[{{ $index }}][unit]"
                                                         class="spec-input" value="{{ $attribute->unit }}"
-                                                        placeholder="jedn." style="width:90px;">
+                                                        placeholder="jedn." class="spec-input spec-input-unit">
                                                     <button type="button" class="icon-btn danger" title="Usuń"
                                                         onclick="removeSpec({{ $index }})">×</button>
                                                 </div>
@@ -804,16 +250,16 @@
 
                     <div class="spec-scroll">
                         <div class="p-3 p-md-4">
-                            <textarea name="description" id="descriptionInput" class="form-control edit-field"
-                                style="min-height: 280px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">{{ $product->description }}</textarea>
+                            <textarea name="description" id="descriptionInput"
+                                class="form-control edit-field u-min-height-280 u-font-mono">{{ $product->description }}</textarea>
 
-                            <div id="descriptionPreviewWrap" style="display:none; margin-top: 1rem;">
-                                <div class="text-muted mb-2" style="font-size:.9rem;">Podgląd (tak będzie wyglądać na
+                            <div id="descriptionPreviewWrap" class="u-display-none u-margin-top-1rem">
+                                <div class="text-muted mb-2 u-font-size-09">Podgląd (tak będzie wyglądać na
                                     stronie produktu):</div>
-                                <div id="descriptionPreview" class="p-3 border rounded" style="background:#fff;"></div>
+                                <div id="descriptionPreview" class="p-3 border rounded u-bg-white"></div>
                             </div>
 
-                            <div class="text-muted mt-3" style="font-size:.9rem;">
+                            <div class="text-muted mt-3 u-font-size-09">
                                 Wskazówka: możesz używać tagów HTML: <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>,
                                 <code>&lt;ul&gt;</code>, <code>&lt;img&gt;</code> itd.
                             </div>
@@ -822,7 +268,7 @@
                 </div>
             </div>
 
-            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
+            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2 u-z-1000">
                 <a href="{{ route('product', $product->slug) }}" class="btn btn-secondary shadow-sm">
                     Anuluj
                 </a>
@@ -866,7 +312,6 @@
             }
 
             document.querySelectorAll('.carousel-image-container').forEach(container => {
-                container.style.cursor = 'zoom-in';
                 container.addEventListener('click', function() {
                     const src = this.getAttribute('data-image');
                     if (src) openImageModal(src);
@@ -932,8 +377,7 @@
                     img.alt = 'new';
 
                     const name = document.createElement('div');
-                    name.className = 'text-muted';
-                    name.style.fontSize = '.85rem';
+                    name.className = 'text-muted newfile-name';
                     name.textContent = file.name.length > 18 ? (file.name.slice(0, 18) + '…') : file
                         .name;
 
@@ -957,8 +401,8 @@
             </td>
             <td class="spec-value">
                 <div class="spec-row-actions">
-                    <input type="text" name="specs[${specIndex}][value]" class="spec-input" placeholder="Wartość" style="flex:1;">
-                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input" placeholder="jedn." style="width:90px;">
+                    <input type="text" name="specs[${specIndex}][value]" class="spec-input spec-input-flex" placeholder="Wartość">
+                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input spec-input-unit" placeholder="jedn.">
                     <button type="button" class="icon-btn danger" title="Usuń" onclick="removeSpec(${specIndex})">×</button>
                 </div>
             </td>

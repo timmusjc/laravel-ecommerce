@@ -4,377 +4,7 @@
 
 @section('main_content')
 
-    <style>
-        /* ====== Базовый стиль (как в edit) ====== */
-        .product-carousel-wrapper {
-            width: 100%;
-        }
-
-        .carousel {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-inner {
-            position: absolute;
-            inset: 0;
-        }
-
-        .carousel-item {
-            height: 100%;
-        }
-
-        .carousel-image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .carousel-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .product-single-image {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .product-single-image .carousel-image-container {
-            position: absolute;
-            inset: 0;
-        }
-
-        .carousel-thumbnails {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: .75rem;
-        }
-
-        .thumbnail-item {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all .2s ease;
-        }
-
-        .thumbnail-item:hover {
-            border-color: #9ca3af;
-        }
-
-        .thumbnail-item.active {
-            border-color: #111827;
-            box-shadow: 0 0 0 1px #111827;
-        }
-
-        .thumbnail-item img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: .5rem;
-        }
-
-        /* ====== Модалка (как в edit) ====== */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn .3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            animation: zoomIn .3s ease;
-        }
-
-        @keyframes zoomIn {
-            from {
-                transform: scale(.8);
-            }
-
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            color: white;
-            font-size: 3rem;
-            font-weight: 300;
-            cursor: pointer;
-            transition: opacity .2s ease;
-            line-height: 1;
-            z-index: 10001;
-        }
-
-        .modal-close:hover {
-            opacity: .7;
-        }
-
-        /* ====== Поля как в edit (крупно/красиво) ====== */
-        .editable-like {
-            border: 2px dashed transparent;
-            border-radius: 10px;
-            transition: all .2s ease;
-            background: transparent;
-        }
-
-        .editable-like:focus {
-            outline: none;
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .product-title-input {
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
-            padding: .35rem .6rem;
-            width: 100%;
-        }
-
-        .price-wrap {
-            position: relative;
-            display: inline-block;
-        }
-
-        .product-price-input {
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            padding: .35rem 2.2rem .35rem .6rem;
-            width: 220px;
-        }
-
-        .price-suffix {
-            position: absolute;
-            right: .7rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 500;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            color: #111827;
-            pointer-events: none;
-        }
-
-        .edit-category {
-            width: auto;
-            min-width: 220px;
-            padding: .45rem .6rem;
-            font-weight: 600;
-            color: #111827;
-            background: transparent;
-            border-radius: 10px;
-        }
-
-        .buy-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .buy-btn {
-            width: 100%;
-        }
-
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* ====== Specs (как в edit) ====== */
-        .spec-scroll {
-            overflow: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: #fff;
-        }
-
-        .spec-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-
-        .spec-table td {
-            padding: .75rem .9rem;
-            border-bottom: 1px solid #eef2f7;
-            vertical-align: top;
-        }
-
-        .spec-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .spec-label {
-            color: #6b7280;
-            width: 45%;
-        }
-
-        .spec-value {
-            font-weight: 600;
-            color: #111827;
-        }
-
-        .spec-input {
-            width: 100%;
-            border: 1px dashed transparent;
-            border-radius: 6px;
-            padding: .4rem .5rem;
-            transition: all .15s ease;
-            background: transparent;
-        }
-
-        .spec-input:focus {
-            outline: none;
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .spec-row-actions {
-            display: flex;
-            gap: .5rem;
-            align-items: center;
-        }
-
-        .icon-btn {
-            border: none;
-            background: transparent;
-            padding: .35rem .5rem;
-            border-radius: 8px;
-            transition: all .15s ease;
-        }
-
-        .icon-btn:hover {
-            background: #f3f4f6;
-        }
-
-        .icon-btn.danger {
-            color: #dc2626;
-        }
-
-        .icon-btn.danger:hover {
-            background: #fee2e2;
-        }
-
-        /* ====== Preview новых файлов (как в edit) ====== */
-        .newfiles-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .75rem;
-            margin-top: .75rem;
-        }
-
-        .newfile-chip {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 999px;
-            padding: .35rem .6rem;
-            background: #fff;
-        }
-
-        .newfile-chip img {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        .chip-remove {
-            border: none;
-            background: transparent;
-            color: #dc2626;
-            font-weight: 800;
-            padding: .1rem .35rem;
-            border-radius: 8px;
-        }
-
-        .chip-remove:hover {
-            background: #fee2e2;
-        }
-
-        /* ====== Fixed buttons (как в edit) ====== */
-        @media (max-width: 991px) {
-            .carousel-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: .5rem;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .carousel-image-container {
-                padding: 1rem;
-            }
-
-            .carousel-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            }
-
-            .modal-close {
-                top: 1rem;
-                right: 1rem;
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    
 
     <div class="container product-page py-4 py-md-5">
         <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="createForm">
@@ -385,7 +15,7 @@
 
                     <div class="product-carousel-wrapper">
                         <div class="product-single-image">
-                            <div class="carousel-image-container" id="mainImageContainer" data-image="">
+                            <div class="carousel-image-container zoomable" id="mainImageContainer" data-image="">
                                 <div class="image-upload-placeholder" id="mainPlaceholder">
                                     <svg fill="currentColor" viewBox="0 0 16 16">
                                         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
@@ -421,11 +51,11 @@
                             <input type="file" name="images[]" id="galleryImagesInput" class="d-none" accept="image/*"
                                 multiple>
 
-                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                            <div class="text-muted mt-2 u-font-size-09">
                                 Główne zdjęcie jest wymagane. Galeria jest opcjonalna.
                             </div>
 
-                            <div id="newFilesPreview" class="newfiles-list" style="display:none;"></div>
+                            <div id="newFilesPreview" class="newfiles-list u-display-none"></div>
                         </div>
                     </div>
 
@@ -436,7 +66,7 @@
 
                         <div class="buy-card mb-3" id="buyBlock">
                             <div class="mb-2">
-                                <label class="text-muted" style="font-size:.9rem;">Kategoria</label><br>
+                                <label class="text-muted u-font-size-09">Kategoria</label><br>
                                 <select name="category_id" class="edit-category editable-like" required>
                                     <option value="" disabled {{ empty($selectedCategoryId) ? 'selected' : '' }}>--
                                         Wybierz kategorię --</option>
@@ -450,13 +80,13 @@
                             </div>
 
                             <div class="mb-2">
-                                <label class="text-muted" style="font-size:.9rem;">Nazwa produktu</label>
+                                <label class="text-muted u-font-size-09">Nazwa produktu</label>
                                 <input type="text" name="name" class="product-title-input editable-like"
                                     placeholder="Nazwa produktu..." required>
                             </div>
 
                             <div class="mb-2">
-                                <label class="text-muted" style="font-size:.9rem;">Cena</label><br>
+                                <label class="text-muted u-font-size-09">Cena</label><br>
                                 <div class="price-wrap">
                                     <input type="text" inputmode="decimal" name="price"
                                         class="product-price-input editable-like" placeholder="0.00" required>
@@ -464,14 +94,13 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="btn btn-dark btn-lg w-100" disabled
-                                style="opacity:.55; cursor:not-allowed;">
+                            <button type="button" class="btn btn-dark btn-lg w-100 u-opacity-55" disabled>
                                 <div class="fw-bold text-uppercase">
                                     <i class="bi bi-cart-plus me-2"></i> Dodaj do koszyka
                                 </div>
                             </button>
 
-                            <div class="text-muted mt-2" style="font-size:.9rem;">
+                            <div class="text-muted mt-2 u-font-size-09">
                                 (Podgląd — przycisk nieaktywny na stronie tworzenia)
                             </div>
                         </div>
@@ -504,19 +133,19 @@
 
                     <div class="spec-scroll">
                         <div class="p-3 p-md-4">
-                            <textarea name="description" id="descriptionInput" class="form-control editable-like"
-                                style="min-height: 280px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"
+                            <textarea name="description" id="descriptionInput"
+                                class="form-control editable-like u-min-height-280 u-font-mono"
                                 placeholder="Wklej tutaj HTML opis (nagłówki, listy, obrazki itd.)..."></textarea>
 
-                            <div id="descriptionPreviewWrap" style="display:none; margin-top: 1rem;">
-                                <div class="text-muted mb-2" style="font-size:.9rem;">Podgląd:</div>
-                                <div id="descriptionPreview" class="p-3 border rounded" style="background:#fff;"></div>
+                            <div id="descriptionPreviewWrap" class="u-display-none u-margin-top-1rem">
+                                <div class="text-muted mb-2 u-font-size-09">Podgląd:</div>
+                                <div id="descriptionPreview" class="p-3 border rounded u-bg-white"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
+            <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2 u-z-1000">
                 <a href="{{ route('home') }}" class="btn btn-secondary shadow-sm">
                     Anuluj
                 </a>
@@ -589,7 +218,6 @@
                 if (this.files && this.files[0]) setMainPreview(this.files[0]);
             });
 
-            mainContainer.style.cursor = 'zoom-in';
             mainContainer.addEventListener('click', function() {
                 const src = this.getAttribute('data-image');
                 if (src) openImageModal(src);
@@ -625,8 +253,7 @@
                     img.alt = 'new';
 
                     const name = document.createElement('div');
-                    name.className = 'text-muted';
-                    name.style.fontSize = '.85rem';
+                    name.className = 'text-muted newfile-name';
                     name.textContent = file.name.length > 18 ? (file.name.slice(0, 18) + '…') : file.name;
 
                     const remove = document.createElement('button');
@@ -681,8 +308,8 @@
             </td>
             <td class="spec-value">
                 <div class="spec-row-actions">
-                    <input type="text" name="specs[${specIndex}][value]" class="spec-input" placeholder="Wartość" style="flex:1;">
-                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input" placeholder="jedn." style="width:90px;">
+                    <input type="text" name="specs[${specIndex}][value]" class="spec-input spec-input-flex" placeholder="Wartość">
+                    <input type="text" name="specs[${specIndex}][unit]" class="spec-input spec-input-unit" placeholder="jedn.">
                     <button type="button" class="icon-btn danger" title="Usuń">×</button>
                 </div>
             </td>

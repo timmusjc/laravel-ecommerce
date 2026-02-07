@@ -33,14 +33,13 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
-                                            <div class="me-3" style="width: 45px; height: 45px;">
+                                            <div class="me-3 u-avatar-45">
                                                 @if ($user->avatar)
                                                     <img src="{{ asset('storage/' . $user->avatar) }}"
                                                         class="rounded-circle w-100 h-100 object-fit-cover border"
                                                         alt="Avatar">
                                                 @else
-                                                    <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
-                                                        style="width: 45px; height: 45px; font-weight: bold;">
+                                                    <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center u-avatar-45-bold">
                                                         {{ substr($user->name, 0, 1) }}
                                                     </div>
                                                 @endif

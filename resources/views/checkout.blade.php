@@ -67,13 +67,13 @@
 
                             <div class="payment-methods d-grid gap-3 mb-4">
 
-                                <div class="border rounded p-3 position-relative" style="cursor: pointer;"
+                                <div class="border rounded p-3 position-relative u-cursor-pointer"
                                     onclick="selectPayment('card')">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="payment_method" id="pay_card"
                                             value="card" {{ old('payment_method', 'card') == 'card' ? 'checked' : '' }}>
                                         <label class="form-check-label w-100 fw-bold" for="pay_card">
-                                            <img src="visa_mastercard.jpg" alt="BLIK" style="height: 20px;" class="me-2">
+                                            <img src="visa_mastercard.jpg" alt="BLIK" class="me-2 u-height-20">
                                             <i class="bi bi-credit-card-2-front me-2"></i> Karta płatnicza
                                         </label>
                                     </div>
@@ -106,13 +106,13 @@
                                     </div>
                                 </div>
 
-                                <div class="border rounded p-3 position-relative" style="cursor: pointer;"
+                                <div class="border rounded p-3 position-relative u-cursor-pointer"
                                     onclick="selectPayment('blik')">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="payment_method" id="pay_blik"
                                             value="blik" {{ old('payment_method') == 'blik' ? 'checked' : '' }}>
                                         <label class="form-check-label w-100 fw-bold" for="pay_blik">
-                                            <img src="Blik_logo.jpg" alt="BLIK" style="height: 20px;" class="me-2">
+                                            <img src="Blik_logo.jpg" alt="BLIK" class="me-2 u-height-20">
                                             BLIK
                                         </label>
                                     </div>
@@ -120,9 +120,8 @@
                                     <div id="blik-details"
                                         class="mt-3 ps-4 {{ old('payment_method') == 'blik' ? '' : 'd-none' }}">
                                         <input type="text" name="blik_code"
-                                            class="form-control text-center fs-5 @error('blik_code') is-invalid @enderror"
-                                            placeholder="000 000" maxlength="6" style="letter-spacing: 3px;"
-                                            value="{{ old('blik_code') }}">
+                                            class="form-control text-center fs-5 u-letter-spacing-3 @error('blik_code') is-invalid @enderror"
+                                            placeholder="000 000" maxlength="6" value="{{ old('blik_code') }}">
 
                                         @error('blik_code')
                                             <div class="invalid-feedback d-block text-center">{{ $message }}</div>
@@ -134,8 +133,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-dark w-100 py-3 fs-5 fw-bold shadow-sm"
-                                style="background-color: #000; color: #fff;">
+                            <button type="submit" class="btn btn-dark w-100 py-3 fs-5 fw-bold shadow-sm u-bg-black">
                                 Zapłać i zamów
                             </button>
                         </form>
@@ -146,9 +144,8 @@
     </div>
 
     <div id="loading-overlay"
-        class="d-none position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-90 d-flex flex-column justify-content-center align-items-center"
-        style="z-index: 9999;">
-        <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"></div>
+        class="d-none position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-90 d-flex flex-column justify-content-center align-items-center u-z-9999">
+        <div class="spinner-border text-primary u-spinner-lg" role="status"></div>
         <h3 class="mt-4 fw-bold">Przetwarzanie płatności...</h3>
         <p class="text-muted">Prosimy nie zamykać okna przeglądarki.</p>
     </div>

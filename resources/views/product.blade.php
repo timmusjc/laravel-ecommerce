@@ -6,219 +6,7 @@
 
 @section('main_content')
 
-    <style>
-        /* ===================================
-           ОСТАВЛЯЕМ ТВОЙ СТИЛЬ, УБИРАЕМ ЛИШНЕЕ
-           (админ-кнопки теперь на Bootstrap)
-           =================================== */
-
-        /* Типографика/гармония справа */
-        .product-title{
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
-            margin-bottom: .75rem;
-        }
-        .product-price{
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-            margin-bottom: 1.25rem;
-        }
-        .buy-card{
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        /* ===================================
-           КАРУСЕЛЬ НА СТРАНИЦЕ ТОВАРА (твой стиль)
-           =================================== */
-
-        .product-carousel-wrapper { width: 100%; }
-
-        .carousel {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
-        .carousel-item { height: 100%; }
-
-        .carousel-image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .carousel-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .product-single-image {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .product-single-image .carousel-image-container {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-        }
-
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(17, 24, 39, 0.7);
-            border-radius: 50%;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .carousel:hover .carousel-control-prev,
-        .carousel:hover .carousel-control-next { opacity: 1; }
-
-        .carousel-control-prev { left: 1rem; }
-        .carousel-control-next { right: 1rem; }
-
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover { background: rgba(17, 24, 39, 0.9); }
-
-        .carousel-arrow { width: 20px; height: 20px; color: white; }
-
-        .carousel-thumbnails {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .thumbnail-item {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .thumbnail-item:hover { border-color: #9ca3af; }
-        .thumbnail-item.active {
-            border-color: #111827;
-            box-shadow: 0 0 0 1px #111827;
-        }
-
-        .thumbnail-item img {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: contain;
-            padding: 0.5rem;
-        }
-
-        /* Твоя модалка */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            width: auto; height: auto;
-            object-fit: contain;
-            animation: zoomIn 0.3s ease;
-        }
-
-        @keyframes zoomIn { from { transform: scale(0.8); } to { transform: scale(1); } }
-
-        .modal-close {
-            position: absolute;
-            top: 2rem; right: 2rem;
-            color: white;
-            font-size: 3rem;
-            font-weight: 300;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-            line-height: 1;
-            z-index: 10001;
-        }
-
-        .modal-close:hover { opacity: 0.7; }
-
-        /* Скролл-область спецификации (чтобы длинная таблица не ломала верх) */
-        .spec-scroll {
-    overflow: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background: #fff;
-}
-
-/* По желанию: чтобы скролл выглядел аккуратнее */
-.spec-scroll::-webkit-scrollbar { width: 10px; }
-.spec-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
-.spec-scroll::-webkit-scrollbar-track { background: #f9fafb; }
-
-        /* Мелкая косметика для таблицы (похоже на твой стиль) */
-        .spec-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-        .spec-table td {
-            padding: .75rem .9rem;
-            border-bottom: 1px solid #eef2f7;
-            vertical-align: top;
-        }
-        .spec-table tr:last-child td { border-bottom: none; }
-        .spec-label { color: #6b7280; width: 45%; }
-        .spec-value { font-weight: 600; color: #111827; }
-
-        @media (max-width: 991px) {
-            .carousel-thumbnails { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.5rem; }
-        }
-        @media (max-width: 575px) {
-            .carousel-image-container { padding: 1rem; }
-            .carousel-control-prev, .carousel-control-next { width: 32px; height: 32px; }
-            .carousel-arrow { width: 16px; height: 16px; }
-            .carousel-control-prev { left: 0.5rem; }
-            .carousel-control-next { right: 0.5rem; }
-            .carousel-thumbnails { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
-            .modal-close { top: 1rem; right: 1rem; font-size: 2.5rem; }
-        }
-    </style>
+    
 
     <div class="container product-page py-4 py-md-5">
         {{-- TOP: карусель слева + инфо/спеки справа --}}
@@ -230,14 +18,14 @@
                         <div id="productCarousel" class="carousel slide">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="carousel-image-container" data-image="{{ asset('storage/' . $product->image) }}">
+                                    <div class="carousel-image-container zoomable" data-image="{{ asset('storage/' . $product->image) }}">
                                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                                     </div>
                                 </div>
 
                                 @foreach ($product->images as $galleryImg)
                                     <div class="carousel-item">
-                                        <div class="carousel-image-container" data-image="{{ asset('storage/' . $galleryImg->path) }}">
+                                        <div class="carousel-image-container zoomable" data-image="{{ asset('storage/' . $galleryImg->path) }}">
                                             <img src="{{ asset('storage/' . $galleryImg->path) }}" alt="{{ $product->name }}">
                                         </div>
                                     </div>
@@ -270,7 +58,7 @@
                     </div>
                 @else
                     <div class="product-single-image" id="mediaBox">
-                        <div class="carousel-image-container" data-image="{{ asset('storage/' . $product->image) }}">
+                        <div class="carousel-image-container zoomable" data-image="{{ asset('storage/' . $product->image) }}">
                             @if ($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                             @else
@@ -360,7 +148,7 @@
         {{-- Админ-кнопки: Bootstrap utilities вместо кастомного CSS --}}
         @auth
             @if (auth()->user()->is_admin)
-                <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index: 1000;">
+                <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2 u-z-1000">
                     <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-secondary shadow-sm d-flex align-items-center gap-2">
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10z" />
@@ -413,7 +201,6 @@
             const closeBtn = document.querySelector('.modal-close');
 
             imageContainers.forEach(container => {
-                container.style.cursor = 'zoom-in';
                 container.addEventListener('click', function() {
                     const imgSrc = this.getAttribute('data-image');
                     modal.style.display = 'flex';

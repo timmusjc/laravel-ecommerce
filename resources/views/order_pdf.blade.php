@@ -4,113 +4,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Faktura nr {{ $order->id }}/{{ date('Y') }}</title>
-    <style>
-        /* Шрифт DejaVu Sans обязателен для польских симвоłów (ą, ę, ś, ć) */
-        body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
-            color: #333;
-        }
-
-        /* Общие стили для таблиц */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        /* Таблицы без рамок (для шапки и подвала) */
-        .no-border td {
-            border: none;
-            padding: 5px 0;
-            vertical-align: top;
-        }
-
-        /* Основная таблица с товарами */
-        .items-table th,
-        .items-table td {
-            border: 1px solid #000;
-            /* Черные тонкие рамки как на фото */
-            padding: 6px;
-            text-align: right;
-            /* Числа равняем по правому краю */
-        }
-
-        .items-table th {
-            background-color: #e0e0e0;
-            /* Серый фон заголовков */
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .items-table td.text-left {
-            text-align: left;
-        }
-
-        /* Заголовки разделов */
-        h1 {
-            font-size: 28px;
-            margin: 0;
-            color: #444;
-            /* Цвет логотипа */
-        }
-
-        .invoice-title {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-            margin-bottom: 5px;
-            display: inline-block;
-            width: 100%;
-        }
-
-        /* Итоговые суммы */
-        .total-box {
-            width: 40%;
-            float: right;
-        }
-
-        .big-total {
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        /* Подписи */
-        .signatures {
-            margin-top: 50px;
-        }
-
-        .signature-line {
-            border-top: 1px solid #000;
-            width: 80%;
-            margin: 0 auto;
-            padding-top: 5px;
-            text-align: center;
-            font-size: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ public_path('build/assets/app.css') }}">
 </head>
 
-<body>
+<body class="pdf-order">
 
     <table class="no-border">
         <tr>
             <td width="50%">
-                <div
-                    style="background-color: #e0e0e0; color: #000000; padding: 10px; display: inline-block; font-weight: bold; font-size: 24px;">
+                <div class="pdf-logo">
                     TEppLE
                 </div>
             </td>
             <td width="50%" align="right">
                 <div class="invoice-title">Faktura nr: FV/{{ $order->id }}/{{ $order->created_at->format('Y') }}</div>
-                <div style="color: rgb(0, 0, 0); font-weight: bold;">Oryginał</div>
+                <div class="pdf-original-label">Oryginał</div>
                 <br>
                 Miejscowość: <strong>Warszawa</strong><br>
                 Data wystawienia: {{ $order->created_at->format('d.m.Y') }}<br>
@@ -119,9 +27,9 @@
         </tr>
     </table>
 
-    <table class="no-border" style="margin-top: 20px;">
+    <table class="no-border u-margin-top-20">
         <tr>
-            <td width="50%" style="padding-right: 20px;">
+            <td width="50%" class="u-padding-right-20">
                 <div class="section-title">Sprzedawca</div>
                 <strong>TEppLE Sp. z o.o.</strong><br>
                 ul. Elektroniczna 15<br>
@@ -129,7 +37,7 @@
                 NIP: 123-456-78-90<br>
                 BDO: 000012345
             </td>
-            <td width="50%" style="padding-left: 20px;">
+            <td width="50%" class="u-padding-left-20">
                 <div class="section-title">Nabywca</div>
                 <strong>{{ $order->user->name }}</strong><br>
                 {{ $order->address }}<br>
@@ -179,14 +87,14 @@
                     $totalVat += $valueVat;
                 @endphp
                 <tr>
-                    <td style="text-align: center;">{{ $counter++ }}</td>
+                    <td class="pdf-text-center">{{ $counter++ }}</td>
                     <td class="text-left">{{ $item->product->name ?? 'Produkt' }}</td>
-                    <td style="text-align: center;">{{ $item->quantity }}</td>
-                    <td style="text-align: center;">szt.</td>
+                    <td class="pdf-text-center">{{ $item->quantity }}</td>
+                    <td class="pdf-text-center">szt.</td>
                     <td>{{ number_format($priceNetto, 2, ',', ' ') }}</td>
                     <td>{{ number_format($valueNetto, 2, ',', ' ') }}</td>
-                    <td style="text-align: center;">23%</td>
-                    <td style="font-weight: bold;">{{ number_format($valueBrutto, 2, ',', ' ') }}</td>
+                    <td class="pdf-text-center">23%</td>
+                    <td class="pdf-bold">{{ number_format($valueBrutto, 2, ',', ' ') }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -198,13 +106,13 @@
             <td width="40%">
                 <table class="items-table">
                     <tr>
-                        <th style="background-color: #fff; border: none;"></th>
+                        <th class="pdf-header-cell"></th>
                         <th>Wartość netto</th>
                         <th>VAT</th>
                         <th>Wartość brutto</th>
                     </tr>
-                    <tr style="background-color: #eee; font-weight: bold;">
-                        <td style="border: none; background: #fff; text-align: right; padding-right: 10px;">RAZEM:</td>
+                    <tr class="pdf-summary-row">
+                        <td class="pdf-summary-cell">RAZEM:</td>
                         <td>{{ number_format($totalNetto, 2, ',', ' ') }}</td>
                         <td>{{ number_format($totalVat, 2, ',', ' ') }}</td>
                         <td>{{ number_format($order->total_price, 2, ',', ' ') }}</td>
@@ -214,12 +122,12 @@
         </tr>
     </table>
 
-    <div style="margin-top: 20px;">
+    <div class="u-margin-top-20">
         <div class="big-total">
             Razem do zapłaty: {{ number_format($order->total_price, 2, ',', ' ') }} PLN
         </div>
 
-        <div style="margin-top: 10px;">
+        <div class="u-margin-top-10">
             Sposób zapłaty: <strong>
                 @if ($order->payment_method == 'blik')
                     BLIK
@@ -239,14 +147,14 @@
     <table class="no-border signatures">
         <tr>
             <td width="50%" align="center">
-                <div style="height: 30px;">
+                <div class="u-height-30">
                 </div>
                 <div class="signature-line">
                     Wystawił(a)
                 </div>
             </td>
             <td width="50%" align="center">
-                <div style="height: 30px;"></div>
+                <div class="u-height-30"></div>
                 <div class="signature-line">
                     Odebrał(a)
                 </div>

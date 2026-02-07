@@ -4,7 +4,7 @@
 
 @section('main_content')
     <div class="categories-page py-4 py-md-5">
-        <div class="container categories-container" style="max-width: 900px;">
+        <div class="container categories-container u-max-width-900">
 
             <h1 class="page-title mb-4">Edytuj kategorię</h1>
 
@@ -17,8 +17,7 @@
                     <div class="category-image-wrapper">
                         <div class="category-image-inner">
 
-                            <label for="imageInput"
-                                style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                            <label for="imageInput" class="category-image-label">
 
                                 @if ($category->image)
                                     <img id="imagePreview" src="{{ asset('storage/' . $category->image) }}"
@@ -32,7 +31,7 @@
                                         <span class="no-image-text">Kliknij, aby dodać zdjęcie</span>
                                     </div>
 
-                                    <img id="imagePreview" class="category-image" style="display:none;">
+                                    <img id="imagePreview" class="category-image u-display-none">
                                 @endif
 
                             </label>
@@ -44,12 +43,12 @@
                         onchange="previewCategoryImage(this)">
 
                     <div class="category-content">
-                        <input type="text" name="name" value="{{ $category->name }}" class="form-control" required
-                            style="font-size:1.25rem; text-align:center;">
+                        <input type="text" name="name" value="{{ $category->name }}"
+                            class="form-control u-font-size-125 u-text-center" required>
                     </div>
                 </div>
 
-                <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2" style="z-index:1000;">
+                <div class="position-fixed bottom-0 end-0 p-4 d-flex gap-2 u-z-1000">
                     <a href="{{ route('categories') }}" class="btn btn-secondary shadow-sm">
                         Anuluj
                     </a>

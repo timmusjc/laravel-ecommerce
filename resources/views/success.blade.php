@@ -2,10 +2,10 @@
 
 @section('main_content')
     <div class="container py-5 text-center">
-        <div class="card shadow border-0 mx-auto" style="max-width: 600px;">
+        <div class="card shadow border-0 mx-auto u-max-width-600">
             <div class="card-body p-5">
                 <div class="mb-4 text-success">
-                    <i class="bi bi-check-circle-fill" style="font-size: 4rem;"></i>
+                    <i class="bi bi-check-circle-fill u-font-size-4rem"></i>
                 </div>
                 <h2 class="mb-3 fw-bold">Dziękujemy za złożenie zamówienia!</h2>
                 <p class="text-muted mb-4">

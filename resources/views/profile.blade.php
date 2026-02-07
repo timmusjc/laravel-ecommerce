@@ -63,7 +63,7 @@
                                         <div id="avatarPlaceholder" class="profile-avatar-placeholder">
                                             {{ strtoupper(substr($user->name, 0, 1)) }}
                                         </div>
-                                        <img id="avatarPreview" class="profile-avatar" style="display: none;"
+                                        <img id="avatarPreview" class="profile-avatar u-display-none"
                                             src="">
                                     @endif
                                     <div class="avatar-overlay">
@@ -76,7 +76,7 @@
                                     </div>
                                 </label>
                                 <input type="file" id="avatarInput" name="avatar" accept="image/*"
-                                    style="display: none;">
+                                    class="u-display-none">
                             </div>
 
                             <!-- Информация -->
@@ -291,91 +291,3 @@
 
 
 @endsection
-
-<style>
-    /* Стили для статусов заказов */
-    .order-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.75rem;
-        border-radius: 6px;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .status-icon {
-        width: 14px;
-        height: 14px;
-        flex-shrink: 0;
-    }
-
-    /* Новый заказ - синий */
-    .order-status-new {
-        background-color: #dbeafe;
-        color: #1e40af;
-    }
-
-    /* В процессе - оранжевый */
-    .order-status-processing {
-        background-color: #fed7aa;
-        color: #c2410c;
-    }
-
-    /* Выполнен - зеленый */
-    .order-status-completed {
-        background-color: #d1fae5;
-        color: #065f46;
-    }
-
-    /* Отменен - серый */
-    .order-status-cancelled {
-        background-color: #e5e7eb;
-        color: #374151;
-    }
-
-    /* Адаптация order-header-right для размещения статуса */
-    .order-header-right {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 768px) {
-        .order-header-right {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .order-status {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-        }
-
-        .status-icon {
-            width: 12px;
-            height: 12px;
-        }
-
-        .order-total {
-            order: -1;
-            width: 100%;
-            margin-bottom: 0.25rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-
-        .order-header-left,
-        .order-header-right {
-            width: 100%;
-        }
-
-        .order-header-right {
-            margin-top: 0.5rem;
-            justify-content: space-between;
-        }
-    }
-</style>

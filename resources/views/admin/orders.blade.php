@@ -23,17 +23,15 @@
                     <div class="card-header bg-white p-3">
                         <div class="row align-items-center">
 
-                            <div class="col-md-4 d-flex align-items-center mb-2 mb-md-0 pointer" data-bs-toggle="collapse"
-                                data-bs-target="#order{{ $order->id }}" style="cursor: pointer;">
+                            <div class="col-md-4 d-flex align-items-center mb-2 mb-md-0 pointer u-cursor-pointer" data-bs-toggle="collapse"
+                                data-bs-target="#order{{ $order->id }}">
 
                                 <div class="me-3 position-relative">
                                     @if ($order->user->avatar)
                                         <img src="{{ asset('storage/' . $order->user->avatar) }}"
-                                            class="rounded-circle border" width="45" height="45"
-                                            style="object-fit: cover;">
+                                            class="rounded-circle border u-object-fit-cover" width="45" height="45">
                                     @else
-                                        <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
-                                            style="width: 45px; height: 45px; font-weight: bold;">
+                                        <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center u-avatar-45-bold">
                                             {{ substr($order->user->name, 0, 1) }}
                                         </div>
                                     @endif
@@ -45,8 +43,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3 text-md-center mb-2 mb-md-0 pointer" data-bs-toggle="collapse"
-                                data-bs-target="#order{{ $order->id }}" style="cursor: pointer;">
+                            <div class="col-md-3 text-md-center mb-2 mb-md-0 pointer u-cursor-pointer" data-bs-toggle="collapse"
+                                data-bs-target="#order{{ $order->id }}">
                                 <span class="fw-bold fs-5">{{ number_format($order->total_price, 2, ',', ' ') }} zł</span>
                             </div>
 
@@ -62,8 +60,8 @@
                                         @csrf
                                         @method('PATCH')
                                         <select name="status"
-                                            class="form-select form-select-sm fw-bold border-{{ $order->status == 'new' ? 'primary' : ($order->status == 'completed' ? 'success' : 'secondary') }}"
-                                            style="max-width: 160px;" onchange="this.form.submit()">
+                                            class="form-select form-select-sm fw-bold u-max-width-160 border-{{ $order->status == 'new' ? 'primary' : ($order->status == 'completed' ? 'success' : 'secondary') }}"
+                                            onchange="this.form.submit()">
                                             <option value="new" {{ $order->status == 'new' ? 'selected' : '' }}>🔵 Nowe
                                             </option>
                                             <option value="processing"
@@ -120,7 +118,7 @@
                                     <div class="d-flex flex-column gap-2">
                                         @foreach ($order->items as $item)
                                             <div class="d-flex align-items-center bg-white p-2 rounded border">
-                                                <div style="width: 40px; height: 40px;" class="me-3 flex-shrink-0">
+                                                <div class="me-3 flex-shrink-0 u-avatar-40">
                                                     @if ($item->product && $item->product->image)
                                                         <img src="{{ asset('storage/' . $item->product->image) }}"
                                                             class="w-100 h-100 object-fit-contain">

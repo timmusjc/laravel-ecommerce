@@ -16,17 +16,7 @@
                 TEppLE
             </a>
             <div class="header-actions">
-                {{-- <!-- кнопка поиска -->
-    <button class="icon-btn search-toggle">
-        🔍
-    </button>
-            <div class="mobile-search" id="mobileSearch">
-    <form action="/search">
-        <input type="text" name="q" class="search-input" placeholder="Szukaj…">
-        <button class="search-btn">🔍</button>
-    </form> --}}
             </div>
-            <!-- Wyszukiwanie -->
             <form action="{{ route('search') }}" method="GET" class="search-form">
                 <input type="search" name="query" class="search-input" placeholder="Szukaj" aria-label="Szukaj">
                 <button type="submit" class="search-btn" aria-label="Szukaj">
@@ -36,7 +26,6 @@
                     </svg>
                 </button>
             </form>
-            <!-- Nawigacja -->
             <nav>
                 <ul class="main-nav">
                     <li>
@@ -45,7 +34,6 @@
                                 <path
                                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                             </svg>
-                            {{-- Licznik produktów w koszyku --}}
                             @if (session('cart') && count(session('cart')) > 0)
                                 <span class="cart-badge">{{ count(session('cart')) }}</span>
                             @endif
@@ -68,7 +56,6 @@
                             </li>
 
                             @php
-                                // Это временное решение (см. ниже про правильный способ)
                                 $categories = \App\Models\Category::all();
                             @endphp
 
@@ -193,8 +180,6 @@
                     </li>
                 </ul>
             </nav>
-
-            {{-- Кнопка мобильного меню (можно реализовать позже) --}}
             <button class="mobile-menu-btn" aria-label="Menu">
                 <svg fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -204,35 +189,36 @@
         </div>
     </header>
 
-
-    <!-- Основной контент -->
     <main class="">
-        {{-- FLASH MESSAGES --}}
+        {{-- flash messages --}}
         @if (session('success') || session('error') || $errors->any())
             <div class="container" style="max-width:1400px; margin-top: 1rem;">
-                {{-- success --}}
                 @if (session('success'))
                     <div class="flash-msg flash-success" role="alert">
                         <div class="flash-text">{{ session('success') }}</div>
-                        <button type="button" class="flash-close " aria-label="Zamknij"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-</svg>
-</button>
+                        <button type="button" class="flash-close " aria-label="Zamknij"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                            </svg>
+                        </button>
                     </div>
                 @endif
 
-                {{-- error --}}
                 @if (session('error'))
                     <div class="flash-msg flash-error" role="alert">
                         <div class="flash-text">{{ session('error') }}</div>
-                        <button type="button" class="flash-close" aria-label="Zamknij"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-</svg>
-</button>
+                        <button type="button" class="flash-close" aria-label="Zamknij"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                            </svg>
+                        </button>
                     </div>
                 @endif
 
-                {{-- validation errors --}}
                 @if ($errors->any())
                     <div class="flash-msg flash-error" role="alert">
                         <div class="flash-text">
@@ -251,7 +237,6 @@
         @yield('main_content')
     </main>
 
-    <!-- Футер -->
     <footer class="site-footer">
         <div class="footer-container">
             <ul class="footer-nav">
@@ -271,8 +256,6 @@
             document.querySelectorAll('.flash-msg').forEach(msg => {
                 const close = msg.querySelector('.flash-close');
                 close?.addEventListener('click', () => msg.remove());
-
-                // auto-hide
                 setTimeout(() => {
                     if (document.body.contains(msg)) msg.remove();
                 }, 5000);
@@ -300,10 +283,6 @@
         });
     </script>
 
-
-
-
-
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 14px;">
@@ -327,7 +306,6 @@
             </div>
         </div>
     </div>
-
 
     @if (session('product_added'))
         <script>

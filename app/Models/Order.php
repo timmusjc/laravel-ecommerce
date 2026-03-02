@@ -8,13 +8,11 @@ class Order extends Model
 {
     protected $fillable = ['user_id', 'status', 'total_price', 'address', 'phone', 'comment', 'payment_method', 'payment_status'];
 
-    // Zamówienie należy do użytkownika
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Zamówienie ma wiele pozycji
     public function items()
     {
         return $this->hasMany(OrderItem::class);

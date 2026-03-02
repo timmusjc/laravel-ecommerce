@@ -5,7 +5,6 @@
 @section('main_content')
 
     <style>
-        /* ====== Твой стиль карусели/миниатюр (оставляем) ====== */
         .product-carousel-wrapper {
             width: 100%;
         }

@@ -5,7 +5,7 @@
 @section('main_content')
 
     <style>
-        /* ====== Базовый стиль (как в edit) ====== */
+
         .product-carousel-wrapper {
             width: 100%;
         }
@@ -99,7 +99,6 @@
             padding: .5rem;
         }
 
-        /* ====== Модалка (как в edit) ====== */
         .image-modal {
             display: none;
             position: fixed;
@@ -160,7 +159,6 @@
             opacity: .7;
         }
 
-        /* ====== Поля как в edit (крупно/красиво) ====== */
         .editable-like {
             border: 2px dashed transparent;
             border-radius: 10px;
@@ -238,7 +236,7 @@
             -moz-appearance: textfield;
         }
 
-        /* ====== Specs (как в edit) ====== */
+
         .spec-scroll {
             overflow: auto;
             border: 1px solid #e5e7eb;
@@ -313,7 +311,7 @@
             background: #fee2e2;
         }
 
-        /* ====== Preview новых файлов (как в edit) ====== */
+
         .newfiles-list {
             display: flex;
             flex-wrap: wrap;
@@ -351,7 +349,7 @@
             background: #fee2e2;
         }
 
-        /* ====== Fixed buttons (как в edit) ====== */
+
         @media (max-width: 991px) {
             .carousel-thumbnails {
                 grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));

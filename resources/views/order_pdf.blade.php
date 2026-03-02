@@ -5,40 +5,33 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Faktura nr {{ $order->id }}/{{ date('Y') }}</title>
     <style>
-        /* Шрифт DejaVu Sans обязателен для польских симвоłów (ą, ę, ś, ć) */
         body {
             font-family: DejaVu Sans, sans-serif;
             font-size: 11px;
             color: #333;
         }
 
-        /* Общие стили для таблиц */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
 
-        /* Таблицы без рамок (для шапки и подвала) */
         .no-border td {
             border: none;
             padding: 5px 0;
             vertical-align: top;
         }
 
-        /* Основная таблица с товарами */
         .items-table th,
         .items-table td {
             border: 1px solid #000;
-            /* Черные тонкие рамки как на фото */
             padding: 6px;
             text-align: right;
-            /* Числа равняем по правому краю */
         }
 
         .items-table th {
             background-color: #e0e0e0;
-            /* Серый фон заголовков */
             text-align: center;
             font-weight: bold;
         }
@@ -47,12 +40,10 @@
             text-align: left;
         }
 
-        /* Заголовки разделов */
         h1 {
             font-size: 28px;
             margin: 0;
             color: #444;
-            /* Цвет логотипа */
         }
 
         .invoice-title {
@@ -70,7 +61,6 @@
             width: 100%;
         }
 
-        /* Итоговые суммы */
         .total-box {
             width: 40%;
             float: right;
@@ -82,7 +72,6 @@
             margin-top: 10px;
         }
 
-        /* Подписи */
         .signatures {
             margin-top: 50px;
         }
@@ -164,17 +153,12 @@
 
             @foreach ($order->items as $item)
                 @php
-                    // Расчеты (Предполагаем, что цена в базе - BRUTTO)
                     $priceBrutto = $item->price;
-                    $vatRate = 0.23; // 23% VAT
-
-                    // Математика: Netto = Brutto / 1.23
+                    $vatRate = 0.23;
                     $priceNetto = $priceBrutto / (1 + $vatRate);
                     $valueNetto = $priceNetto * $item->quantity;
                     $valueBrutto = $priceBrutto * $item->quantity;
                     $valueVat = $valueBrutto - $valueNetto;
-
-                    // Суммируем общие итоги
                     $totalNetto += $valueNetto;
                     $totalVat += $valueVat;
                 @endphp

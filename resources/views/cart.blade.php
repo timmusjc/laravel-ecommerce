@@ -114,7 +114,7 @@
                         <div class="summary-row">
                             <span class="summary-label summary-total">Razem:</span>
                             <span id="total-price" class="summary-value summary-total">
-                            {{ number_format($total, 2, ',', ' ') }} zł</span>
+                                {{ number_format($total, 2, ',', ' ') }} zł</span>
                         </div>
 
                         <a href="{{ route('checkout') }}">

@@ -6,7 +6,6 @@
     <div class="profile-page">
         <div class="container profile-container">
 
-            <!-- Алерты -->
             @if (session('success'))
                 <div class="profile-alert alert-success">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -46,14 +45,11 @@
 
             <div class="profile-layout">
 
-                <!-- Левая колонка - Карточка профиля -->
                 <div class="profile-sidebar">
                     <div class="profile-card">
-                        <!-- Форма с аватаром и именем -->
                         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            <!-- Аватар -->
                             <div class="profile-avatar-wrapper">
                                 <label for="avatarInput" class="avatar-label">
                                     @if ($user->avatar)
@@ -79,7 +75,6 @@
                                     style="display: none;">
                             </div>
 
-                            <!-- Информация -->
                             <div class="profile-info">
                                 <h2 class="profile-name">{{ $user->name }}</h2>
                                 <p class="profile-email">{{ $user->email }}</p>
@@ -135,7 +130,6 @@
                     </div>
                 </div>
 
-                <!-- Правая колонка - История заказов -->
                 <div class="profile-main">
                     <div class="profile-tabs-card">
                         <h2 class="orders-title">Historia zamówień</h2>
@@ -153,7 +147,6 @@
                                                         class="order-date">{{ $order->created_at->format('d.m.Y H:i') }}</span>
                                                 </div>
                                                 <div class="order-header-right">
-                                                    <!-- Статус заказа -->
                                                     <span class="order-status order-status-{{ $order->status }}">
                                                         @switch($order->status)
                                                             @case('new')
@@ -209,7 +202,6 @@
                                                 @foreach ($order->items as $item)
                                                     <div class="order-item">
                                                         @if ($item->product)
-                                                            <!-- Если товар существует - делаем ссылку -->
                                                             <a href="{{ route('product', $item->product->slug) }}"
                                                                 class="item-image">
                                                                 @if ($item->product->image)
@@ -228,7 +220,6 @@
                                                                 @endif
                                                             </a>
                                                         @else
-                                                            <!-- Если товар удален - без ссылки -->
                                                             <div class="item-image">
                                                                 <div class="item-placeholder">
                                                                     <svg width="24" height="24"
@@ -292,90 +283,4 @@
 
 @endsection
 
-<style>
-    /* Стили для статусов заказов */
-    .order-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.75rem;
-        border-radius: 6px;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        white-space: nowrap;
-    }
 
-    .status-icon {
-        width: 14px;
-        height: 14px;
-        flex-shrink: 0;
-    }
-
-    /* Новый заказ - синий */
-    .order-status-new {
-        background-color: #dbeafe;
-        color: #1e40af;
-    }
-
-    /* В процессе - оранжевый */
-    .order-status-processing {
-        background-color: #fed7aa;
-        color: #c2410c;
-    }
-
-    /* Выполнен - зеленый */
-    .order-status-completed {
-        background-color: #d1fae5;
-        color: #065f46;
-    }
-
-    /* Отменен - серый */
-    .order-status-cancelled {
-        background-color: #e5e7eb;
-        color: #374151;
-    }
-
-    /* Адаптация order-header-right для размещения статуса */
-    .order-header-right {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 768px) {
-        .order-header-right {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .order-status {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-        }
-
-        .status-icon {
-            width: 12px;
-            height: 12px;
-        }
-
-        .order-total {
-            order: -1;
-            width: 100%;
-            margin-bottom: 0.25rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-
-        .order-header-left,
-        .order-header-right {
-            width: 100%;
-        }
-
-        .order-header-right {
-            margin-top: 0.5rem;
-            justify-content: space-between;
-        }
-    }
-</style>

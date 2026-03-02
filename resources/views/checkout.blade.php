@@ -53,9 +53,9 @@
                                 <label for="phone" class="form-label">Numer telefonu</label>
                                 <input type="tel" id="phone" class="form-control form-input" name="phone" required
                                     value="{{ old('phone') }}" placeholder="+48 123 456 789">
-                                    @error('phone')
-                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
-                                        @enderror
+                                @error('phone')
+                                    <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-4">
@@ -73,7 +73,8 @@
                                         <input class="form-check-input" type="radio" name="payment_method" id="pay_card"
                                             value="card" {{ old('payment_method', 'card') == 'card' ? 'checked' : '' }}>
                                         <label class="form-check-label w-100 fw-bold" for="pay_card">
-                                            <img src="visa_mastercard.jpg" alt="BLIK" style="height: 20px;" class="me-2">
+                                            <img src="visa_mastercard.jpg" alt="BLIK" style="height: 20px;"
+                                                class="me-2">
                                             <i class="bi bi-credit-card-2-front me-2"></i> Karta płatnicza
                                         </label>
                                     </div>
@@ -90,17 +91,19 @@
 
                                         <div class="row g-2">
                                             <div class="col-6">
-                                                <input type="text" name="card_year" class="form-control" placeholder="MM/YY">
+                                                <input type="text" name="card_year" class="form-control"
+                                                    placeholder="MM/YY">
                                                 @error('card_year')
-                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
-                                        @enderror
+                                                    <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            
+
                                             <div class="col-6">
-                                                <input type="text" name="card_cvc" class="form-control" placeholder="CVC">
+                                                <input type="text" name="card_cvc" class="form-control"
+                                                    placeholder="CVC">
                                                 @error('card_cvc')
-                                            <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
-                                        @enderror
+                                                    <div class="invalid-feedback d-block mb-2">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -154,12 +157,9 @@
     </div>
 
     <script>
-        // 1. Переключение методов оплаты
         function selectPayment(method) {
-            // Выбираем радио-кнопку
             document.getElementById('pay_' + method).checked = true;
 
-            // Показываем нужные поля
             if (method === 'card') {
                 document.getElementById('card-details').classList.remove('d-none');
                 document.getElementById('blik-details').classList.add('d-none');
@@ -176,6 +176,5 @@
                 e.target.submit();
             }, 2000);
         });
-
     </script>
 @endsection

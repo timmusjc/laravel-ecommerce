@@ -71,3 +71,38 @@ Below is a real-world case of deploying this application on a free **Oracle Clou
 *   **Nginx Proxy Manager:** Acts as the reverse proxy (the "gatekeeper"), accepting traffic on ports 80/443, automatically issuing SSL certificates from Let's Encrypt, and routing requests to the appropriate containers based on subdomains.
 *   **Docker Compose:** An isolated environment containing Nginx, PHP-FPM, and MySQL.
 ### Deployment Instructions:
+
+1. **Server Preparation**
+Install Docker and Docker Compose on your Ubuntu/Debian server. Install and start the Nginx Proxy Manager container.
+
+2. **Code delivery**
+You can use git clone, or if the project was compiled locally, send the files directly via SCP:
+    ```bash
+    scp -i ~/.ssh/your-key.key -r ./project_folder ubuntu@your_server_ip:/home/ubuntu/sklep/
+
+3. **Configure .env for Production**
+In the project folder on the server, open .env and set up the URLs (replace with your actual domain):
+    ```bash
+    APP_ENV=production
+    APP_DEBUG=false
+    APP_URL=[https://shop.yourdomain.com](https://shop.yourdomain.com)
+    ASSET_URL=[https://shop.yourdomain.com](https://shop.yourdomain.com)
+
+4. **Run Docker Containers**
+From the project directory, execute:
+    ```bash
+    docker compose up -d --build
+
+Create a symbolic link for the storage directory directly inside the container:
+    ```bash
+    docker compose exec app php artisan storage:link
+
+5. **Configure Nginx Proxy Manager**
+    1. **Open the NPM dashboard (usually port 81).**
+    2. **Add a new Proxy Host.**
+    3. **Domain Names: shop.yourdomain.com.**
+    4. **Forward Hostname / IP: The internal Docker network IP (usually 172.17.0.1) or the container name.**
+    5. **Forward Port: The port mapped in your docker-compose.yml (e.g., 8000).**
+    6. **Go to the SSL tab, select Request a new SSL Certificate, and enable Force SSL.**
+
+## If you liked this project or the DevOps deployment architecture, please consider giving this repository a ⭐️!

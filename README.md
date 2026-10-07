@@ -36,16 +36,18 @@ To ensure the simplest setup without PHP or database version conflicts, we use *
    cd laravel-ecommerce
 
 2. **Configure the environment file:**
-```bash
+    ```bash
     cp .env.example .env
 
 3. **Install Composer dependencies (via a temporary container):**
-```bash
-docker run --rm \
-    -u "$(id -u):$(id -g)" \
-    -v "$(pwd):/var/www/html" \
-    -w /var/www/html \
-    laravelsail/php83-composer:latest \
-    composer install --ignore-platform-reqs
-    
+    ```bash
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php83-composer:latest \
+        composer install --ignore-platform-reqs
+
 4. **Start the project containers:**
+    ```bash
+    ./vendor/bin/sail up -d

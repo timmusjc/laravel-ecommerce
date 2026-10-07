@@ -51,3 +51,23 @@ To ensure the simplest setup without PHP or database version conflicts, we use *
 4. **Start the project containers:**
     ```bash
     ./vendor/bin/sail up -d
+
+5. **Generate the application key and seed the database:**
+    ```bash
+    ./vendor/bin/sail artisan key:generate
+    ./vendor/bin/sail artisan migrate --seed
+    ./vendor/bin/sail artisan storage:link
+
+6. **Build the frontend (Tailwind + Vite):**
+    ```bash
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev
+
+**Done! Your store is now available at** http://localhost
+
+## 🚀 Production Deployment (Linux / Oracle Cloud ARM)
+Below is a real-world case of deploying this application on a free **Oracle Cloud ARM server** (12GB RAM, 2 Core Ampere) using **Docker Compose and Nginx Proxy Manager (NPM).**
+### Architecture:
+*   **Nginx Proxy Manager:** Acts as the reverse proxy (the "gatekeeper"), accepting traffic on ports 80/443, automatically issuing SSL certificates from Let's Encrypt, and routing requests to the appropriate containers based on subdomains.
+*   **Docker Compose:** An isolated environment containing Nginx, PHP-FPM, and MySQL.
+### Deployment Instructions:

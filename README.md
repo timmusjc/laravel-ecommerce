@@ -8,6 +8,14 @@
 
 A modern, fast, and responsive e-commerce platform built on **Laravel 11**. The project features a complete product catalog, shopping cart, admin panel, and is fully prepared for Production deployment using Docker.
 
+## 🌍 Live Demo
+
+Want to see it in action? You can poke around, test the features, and experience how fast it works on the live server!
+
+👉 **[Check out the live store here](https://tepple.timmus.jc.ar)**
+
+*(Feel free to browse the catalog, add items to the cart, and test the responsive design).*
+
 ## ✨ Key Features
 
 *   **Product Catalog:** Convenient categorization, rich product pages with image galleries.
@@ -18,9 +26,10 @@ A modern, fast, and responsive e-commerce platform built on **Laravel 11**. The 
 *   **Security:** CSRF & XSS protection, secure password hashing, and HTTPS-ready out of the box.
 
 ---
-№№ Screenshots
+## 🎞️ Screenshots
 <img width="1897" height="942" alt="image" src="https://github.com/user-attachments/assets/b4354ad1-776d-4d6d-9954-7ea7eeaa6647" />
 <img width="1899" height="938" alt="image" src="https://github.com/user-attachments/assets/b996f7bb-8d62-443d-9bbf-55334b6e6733" />
+<img width="1897" height="937" alt="image" src="https://github.com/user-attachments/assets/611d1d58-60b0-4367-8f42-1575bdeb2165" />
 
 
 ## 💻 Local Installation (Windows & Linux)
